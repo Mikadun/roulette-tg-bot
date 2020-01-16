@@ -24,7 +24,10 @@ def got_email(message):
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_CODE))
 def got_code(message):
     if utils.is_code(code):
-        bot.send_message(message.chat.id, 'Write you group')
+        if authentication.check_code(message.from_user.id, message.text):
+            bot.send_message(message.chat.id, 'Write you group')
+        else:
+            bot.send_message(message.chat.id, 'Wrong code')
     else:
         bot.send_message(message.chat.id, 'Code must contain 4 digits')
 
