@@ -5,9 +5,9 @@ import psycopg2
 class Unauthenticated_users():
 	def __init__(self):
 
-		self.conn = psycopg2.connect(dbname='***REMOVED***', user='***REMOVED***', 
-									password='***REMOVED***', 
-									host='***REMOVED***')
+		self.conn = psycopg2.connect(dbname = os.getenv('DB_NAME'), user = os.getenv('DB_NAME'), 
+									password = os.getenv('DB_PASSWORD'), 
+									host = os.getenv('DB_HOST'))
 		self.cur = self.conn.cursor()
 
 	def __del__(self):
@@ -147,3 +147,5 @@ class Authenticated_users():
 		self.cur.execute('''SELECT * FROM "Authenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
 		return self.cur.fetchall()[0]
 
+unauth_users = Unauthenticated_users()
+auth_users = Authenticated_users()

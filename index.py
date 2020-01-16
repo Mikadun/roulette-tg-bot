@@ -1,20 +1,22 @@
 import telebot
-from modules.utils import getToken
+import utils
+import os
+from states import States
 
-bot = telebot.TeleBot(token = getToken())
+bot = telebot.TeleBot(token = os.getenv('TOKEN'))
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
     bot.send_message(message.chat.id, 'Hello')
 
-@bot.message_handler(func = is_fefu_email)
+@bot.message_handler(func = States.is_current_state(States.S_ENTER_MAIL))
 def got_email(message):
     if send_code(message.text, message.from_user.id) == -1:
         bot.send_message(message.chat.id, 'This tg account or email was already registered')
     else:
         bot.send_message(message.chat.id, 'Send code to {email}. Write your auth code'.format(email = message.text))
 
-@bot.message_handler(func = is_code)
+@bot.message_handler(func = States.is_current_state(States.S_ENTER_CODE))
 def got_code(message):
     code = int(message.text)
     if check_code(message.from_user.id, code):

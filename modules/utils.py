@@ -1,22 +1,9 @@
 import json
-from modules.bot_db import email_confirmation as em_conf, users
-from transliterate import translit
-
-def get_token():
-    file_path = 'telegram-token.json'
-    try:
-        return json.load(open(file_path))['token']
-    except:
-        print('Miss token file. Write your telegram bot token here')
-        token = input()
-        for c in [' ', '\n', '"', "'"]:
-            token = token.strip(c)
-        json.dump({'token': token}, open(file_path, 'w'))
-        return get_token()
+from modules.db_manager import unauth_users, auth_users
 
 def is_fefu_email(message):
     email = message.text.strip()
-    if users.check_user_id(message.from_user.id):
+    if unauth_users.check_user_id(message.from_user.id):
         return False
 
     if email.count('@dvfu.ru') + email.count('@students.dvfu.ru') == 1:
@@ -29,7 +16,6 @@ def is_fefu_email(message):
             return True
     return False
 
-STATES = {'expect_code': 0, 'expect_group': 1}
 def is_code(message):
     if not em_conf.get_state(message.from_user.id) == STATES['expect_code']:
         return False
