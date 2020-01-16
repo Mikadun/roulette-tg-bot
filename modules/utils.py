@@ -32,10 +32,10 @@ def is_group(message):
 def is_full_name(name):
         data = name.split()
         if len(data) != 3:
-                return False
+            return False
         for i in data:
-                if not i.isalpha():
-                        return False
+            if not i.isalpha():
+                return False
         return data
     
 def get_info(user_id):
