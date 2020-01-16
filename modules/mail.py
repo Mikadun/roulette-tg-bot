@@ -1,6 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import os
 
 def send_mail(host_mail, host_password, subject, receiver, content):
     message = MIMEMultipart()
@@ -16,8 +17,8 @@ def send_mail(host_mail, host_password, subject, receiver, content):
     server.quit()
 
 def verification_mail(receiver, code):
-    host = '***REMOVED***'
-    password = '***REMOVED***'
+    host = os.getenv('EMAIL_HOST')
+    password = os.getenv('EMAIL_PASSWORD')
     content = 'Your authentication code is {code}'.format(code = code)
     subject = 'Authentication code for roulette bot'
     send_mail(host, password, subject, receiver, content)

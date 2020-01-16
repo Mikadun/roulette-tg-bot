@@ -9,6 +9,6 @@ class States(Enum):
         S_ENTER_GROUP = 4
 
         def is_current_state(self, state):
-                return (lambda message: get_state(message.from_user.id) == state)
+                return (lambda message: unauth_users.get_state(message.from_user.id) == state)
 
 states = States()

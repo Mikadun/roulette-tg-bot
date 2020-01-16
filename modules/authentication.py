@@ -2,7 +2,7 @@ from modules.mail import verification_mail
 from modules.db_manager import unauth_users, auth_users
 from random import randint
 
-def send_code(receiver, user_id):
+def send_code(user_id, receiver):
     MIN, MAX = 1000, 9999
     code = randint(MIN, MAX)
     if unauth_users.add(receiver, code, user_id) == -1:
@@ -12,7 +12,7 @@ def send_code(receiver, user_id):
 
 def check_code(user_id, code):
     if unauth_users.get_code(user_id) == code:
-        unauth_users.set_state(user_id)
+        unauth_users.next_state(user_id)
         return True
     return False
 

@@ -13,9 +13,6 @@ def is_fefu_email(email):
             return True
     return False
 
-def is_code(code):
-    return code.isnumeric() and 1000 <= int(code) <= 9999
-
 def is_group(message):
     return True
 
