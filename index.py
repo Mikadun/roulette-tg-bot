@@ -23,19 +23,18 @@ def got_email(message):
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_CODE))
 def got_code(message):
-    if utils.is_code(code):
-        if authentication.check_code(message.from_user.id, message.text):
-            bot.send_message(message.chat.id, 'Write you group')
-        else:
-            bot.send_message(message.chat.id, 'Wrong code')
+    if authentication.check_code(message.from_user.id, message.text):
+        bot.send_message(message.chat.id, 'Write you group')
     else:
-        bot.send_message(message.chat.id, 'Code must contain 4 digits')
+        bot.send_message(message.chat.id, 'Wrong code')
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_GROUP))
 def got_group(message):
-    group = message.text
-    register(message.from_user.id, group)
-    bot.send_message(message.chat.id, 'Succesfully registered')
+    if authentication.check_group(message.from_user.id, message.text):
+        register(message.from_user.id, message.text)
+        bot.send_message(message.chat.id, 'Succesfully registered')
+    else:
+        bot.send_message(message.chat.id, 'Group not found')
 
 print('Bot is running')
 bot.polling()
