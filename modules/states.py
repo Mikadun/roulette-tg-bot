@@ -10,3 +10,5 @@ class States(Enum):
 
         def is_current_state(self, state):
                 return (lambda message: get_state(message.from_user.id) == state)
+
+states = States()

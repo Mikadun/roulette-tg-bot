@@ -28,6 +28,3 @@ def is_full_name(name):
         if not i.isalpha():
             return False
     return data
-
-if __name__ == '__main__':
-    print(get_token())
