@@ -5,9 +5,9 @@ import psycopg2
 class Unauthenticated_users():
 	def __init__(self):
 
-		self.conn = psycopg2.connect(dbname = os.getenv('DB_NAME'), user = os.getenv('DB_NAME'), 
-									password = os.getenv('DB_PASSWORD'), 
-									host = os.getenv('DB_HOST'))
+		self.conn = psycopg2.connect(dbname='***REMOVED***', user='***REMOVED***', 
+									password='***REMOVED***', 
+									host='***REMOVED***')
 		self.cur = self.conn.cursor()
 
 	def __del__(self):
@@ -20,7 +20,7 @@ class Unauthenticated_users():
 		return not(self.cur.fetchall() == [])
 
 	def check_user_id(self, user_id):
-		self.cur.execute('''SELECT * FROM "Unauthenticated_usersn" WHERE ("Tg_ID" = %s)''', (user_id,))
+		self.cur.execute('''SELECT * FROM "Unauthenticated_users" WHERE ("Tg_ID" = %s)''', (user_id,))
 
 		return not(self.cur.fetchall() == [])
 
@@ -28,15 +28,53 @@ class Unauthenticated_users():
 		self.cur.execute('''SELECT * FROM "Unauthenticated_users"''')
 		return self.cur.fetchall()
 
-	def add(self, email, code, user_id):
+	def add(self, user_id):
 		if self.check_email(email) or self.check_user_id(user_id):
 			return -1
 
-		self.cur.execute('''INSERT INTO "Unauthenticated_users" ("Email", "Code", "Tg_ID", "State") VALUES (%s, %s, %s, %s)''', (email, code, user_id, 0))
+		self.cur.execute('''INSERT INTO "Unauthenticated_users" ("Tg_ID", "State") VALUES (%s, %s)''', (user_id, 0))
 		self.conn.commit()
 		return 0
 
+	def update_name(self, user_id, f_name, m_name, l_name):
+		if not(self.check_user_id(user_id)):
+			return -1
+
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "F_name" = %s where "Tg_ID" = %s''', (user_id, f_name))
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "M_name" = %s where "Tg_ID" = %s''', (user_id, m_name))
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "L_name" = %s where "Tg_ID" = %s''', (user_id, l_name))
+		self.conn.commit()
+		return 0
+
+	def update_email(self, user_id, email):
+		if not(self.check_user_id(user_id)):
+			return -1
+
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "Email" = %s where "Tg_ID" = %s''', (user_id, email))
+		self.conn.commit()
+		return 0
+
+	def update_code(self, user_id, code):
+		if not(self.check_user_id(user_id)):
+			return -1
+
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "Code" = %s where "Tg_ID" = %s''', (user_id, code))
+		self.conn.commit()
+		return 0
+
+	def update_group(self, user_id, group):
+		if not(self.check_user_id(user_id)):
+			return -1
+
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "Group" = %s where "Tg_ID" = %s''', (user_id, group))
+		self.conn.commit()
+		return 0
+
+
 	def delete(self, user_id):
+		if not(self.check_user_id(user_id)):
+			return -1
+
 		self.cur.execute('''DELETE FROM "Unauthenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
 		self.conn.commit()
 		return 0
@@ -46,14 +84,14 @@ class Unauthenticated_users():
 			return -1
 
 		self.cur.execute('''SELECT * FROM "Unauthenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
-		return self.cur.fetchall()[0][2]
+		return self.cur.fetchall()[0][3]
 
 	def get_email(self, user_id):
 		if not(self.check_user_id(user_id)):
 			return -1
-			
+
 		self.cur.execute('''SELECT * FROM "Unauthenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
-		return self.cur.fetchall()[0][1]
+		return self.cur.fetchall()[0][2]
 
 	def get_state(self, user_id):
 		if not(self.check_user_id(user_id)):
