@@ -42,10 +42,16 @@ class Unauthenticated_users():
 		return 0
 
 	def get_code(self, user_id):
+		if not(self.check_user_id(user_id)):
+			return -1
+
 		self.cur.execute('''SELECT * FROM "Unauthenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
 		return self.cur.fetchall()[0][2]
 
 	def get_email(self, user_id):
+		if not(self.check_user_id(user_id)):
+			return -1
+			
 		self.cur.execute('''SELECT * FROM "Unauthenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
 		return self.cur.fetchall()[0][1]
 

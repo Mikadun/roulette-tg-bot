@@ -29,17 +29,15 @@ def is_group(message):
     
     return True
 
-def get_name(email):
-    left_part = email.split('@')[0]
-    dividers = ['.', '_']
-
-    for divider in dividers:
-        if divider in left_part:
-            name = ' '.join(left_part.split(divider))
-            return translit(name, language_code='ru', reversed=True)
-
-    return translit(left_part, language_code='ru', reversed=True)
-
+def is_full_name(name):
+        data = name.split()
+        if len(data) != 3:
+                return False
+        for i in data:
+                if not i.isalpha():
+                        return False
+        return data
+    
 def get_info(user_id):
     result = users.get_info(user_id)
     if result == -1:
