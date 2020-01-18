@@ -84,21 +84,21 @@ class Unauthenticated_users():
 			return -1
 
 		self.cur.execute('''SELECT * FROM "Unauthenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
-		return self.cur.fetchall()[0][3]
+		return self.cur.fetchall()[0][7]
 
 	def get_email(self, user_id):
 		if not(self.check_user_id(user_id)):
 			return -1
 
 		self.cur.execute('''SELECT * FROM "Unauthenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
-		return self.cur.fetchall()[0][2]
+		return self.cur.fetchall()[0][6]
 
 	def get_state(self, user_id):
 		if not(self.check_user_id(user_id)):
 			return -1
 
 		self.cur.execute('''SELECT * FROM "Unauthenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
-		return self.cur.fetchall()[0][4]
+		return self.cur.fetchall()[0][8]
 
 	def next_state(self, user_id):
 		if not(self.check_user_id(user_id)):
