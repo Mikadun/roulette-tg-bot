@@ -225,7 +225,7 @@ class Authenticated_users():
 			return True
 
 	def remove_points(self, user_id, points):
-		try
+		try:
 			self.cur.execute('''SELECT * FROM "Authenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
 			temp = self.cur.fetchall()[0][6]
 			self.cur.execute('''UPDATE "Authenticated_users" SET "Points" = %s where "Tg_ID" = %s''', (temp-points, user_id))

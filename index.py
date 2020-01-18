@@ -48,5 +48,9 @@ def got_group(message):
     else:
         bot.send_message(message.chat.id, 'Group not found')
 
+@bot.message_handler(func = lambda message: True)
+def any_message(message):
+    bot.send_message(message.chat.id, 'Write /help for command list')
+
 print('Bot is running')
 bot.polling()
