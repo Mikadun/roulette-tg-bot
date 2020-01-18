@@ -52,14 +52,23 @@ class Unauthenticated_users():
 		self.cur.execute('''UPDATE "Unauthenticated_users" SET "F_name" = %s where "Tg_ID" = %s''', (f_name, user_id))
 		self.cur.execute('''UPDATE "Unauthenticated_users" SET "M_name" = %s where "Tg_ID" = %s''', (m_name, user_id))
 		self.cur.execute('''UPDATE "Unauthenticated_users" SET "L_name" = %s where "Tg_ID" = %s''', (l_name, user_id))
+
+		state = self.get_state(user_id)
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "State" = %s where "Tg_ID" = %s''', (state+1, user_id))
+		
 		self.conn.commit()
 		return 0
 
-	def update_email(self, user_id, email):
+	def update_email(self, user_id, email, code):
 		if not(self.check_user_id(user_id)):
 			return -1
 
 		self.cur.execute('''UPDATE "Unauthenticated_users" SET "Email" = %s where "Tg_ID" = %s''', (email, user_id))
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "Code" = %s where "Tg_ID" = %s''', (code, user_id))
+
+		state = self.get_state(user_id)
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "State" = %s where "Tg_ID" = %s''', (state+1, user_id))
+
 		self.conn.commit()
 		return 0
 
