@@ -14,6 +14,13 @@ class Unauthenticated_users():
 		self.cur.close()
 		self.conn.close()
 
+	def get_info(self, user_id):
+		if not(self.check_user_id(user_id)):
+			return -1
+
+		self.cur.execute('''SELECT * FROM "Unauthenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
+		return self.cur.fetchall()[0]	
+
 	def check_email(self, email):
 		self.cur.execute('''SELECT * FROM "Unauthenticated_users" WHERE ("Email" = %s)''', (email,))
 
