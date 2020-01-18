@@ -27,10 +27,12 @@ class Unauthenticated_users():
 		return not(self.cur.fetchall() == [])
 
 	def check_user_id(self, user_id):
-		self.cur.execute('''SELECT * FROM "Unauthenticated_users" WHERE ("Tg_ID" = %s)''', (user_id,))
-
-		return not(self.cur.fetchall() == [])
-
+		try:
+			self.cur.execute('''SELECT * FROM "Unauthenticated_users" WHERE ("Tg_ID" = %s)''', (user_id,))
+			return not(self.cur.fetchall() == [])
+		except:
+			return -1
+			
 	def show_all(self):
 		self.cur.execute('''SELECT * FROM "Unauthenticated_users"''')
 		return self.cur.fetchall()
