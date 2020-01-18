@@ -18,7 +18,8 @@ def check_code(user_id, code):
 
 def start_registration(user_id):
     if auth_users.check_user_id(user_id) or unauth_users.add(user_id) == -1:
-        return False
+        if auth_users.check_user_id(user_id) or unauth_users.add(user_id) == False:
+            return False
     return True
 
 def add_full_name(user_id, full_name):
