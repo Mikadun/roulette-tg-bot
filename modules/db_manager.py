@@ -40,9 +40,9 @@ class Unauthenticated_users():
 		if not(self.check_user_id(user_id)):
 			return -1
 
-		self.cur.execute('''UPDATE "Unauthenticated_users" SET "F_name" = %s where "Tg_ID" = %s''', (user_id, f_name))
-		self.cur.execute('''UPDATE "Unauthenticated_users" SET "M_name" = %s where "Tg_ID" = %s''', (user_id, m_name))
-		self.cur.execute('''UPDATE "Unauthenticated_users" SET "L_name" = %s where "Tg_ID" = %s''', (user_id, l_name))
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "F_name" = %s where "Tg_ID" = %s''', (f_name, user_id))
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "M_name" = %s where "Tg_ID" = %s''', (m_name, user_id))
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "L_name" = %s where "Tg_ID" = %s''', (l_name, user_id))
 		self.conn.commit()
 		return 0
 
@@ -50,7 +50,7 @@ class Unauthenticated_users():
 		if not(self.check_user_id(user_id)):
 			return -1
 
-		self.cur.execute('''UPDATE "Unauthenticated_users" SET "Email" = %s where "Tg_ID" = %s''', (user_id, email))
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "Email" = %s where "Tg_ID" = %s''', (email, user_id))
 		self.conn.commit()
 		return 0
 
@@ -58,7 +58,7 @@ class Unauthenticated_users():
 		if not(self.check_user_id(user_id)):
 			return -1
 
-		self.cur.execute('''UPDATE "Unauthenticated_users" SET "Code" = %s where "Tg_ID" = %s''', (user_id, code))
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "Code" = %s where "Tg_ID" = %s''', (code, user_id))
 		self.conn.commit()
 		return 0
 
@@ -66,7 +66,7 @@ class Unauthenticated_users():
 		if not(self.check_user_id(user_id)):
 			return -1
 
-		self.cur.execute('''UPDATE "Unauthenticated_users" SET "Group" = %s where "Tg_ID" = %s''', (user_id, group))
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "Group" = %s where "Tg_ID" = %s''', (group, user_id))
 		self.conn.commit()
 		return 0
 
