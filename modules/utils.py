@@ -13,7 +13,7 @@ def is_fefu_email(email):
     return False
 
 def is_full_name(name):
-    data = name.split()
+    data = name.lower().title().split()
     if len(data) != 3:
         return False
 
