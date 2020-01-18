@@ -29,7 +29,7 @@ class Unauthenticated_users():
 		return self.cur.fetchall()
 
 	def add(self, user_id):
-		if self.check_email(email) or self.check_user_id(user_id):
+		if self.check_user_id(user_id):
 			return -1
 
 		self.cur.execute('''INSERT INTO "Unauthenticated_users" ("Tg_ID", "State") VALUES (%s, %s)''', (user_id, 0))
