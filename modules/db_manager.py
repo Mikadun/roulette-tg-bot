@@ -41,7 +41,7 @@ class Unauthenticated_users():
 		if self.check_user_id(user_id):
 			return -1
 
-		self.cur.execute('''INSERT INTO "Unauthenticated_users" ("Tg_ID", "State") VALUES (%s, %s)''', (user_id, 0))
+		self.cur.execute('''INSERT INTO "Unauthenticated_users" ("Tg_ID", "State") VALUES (%s, %s)''', (user_id, 1))
 		self.conn.commit()
 		return 0
 
