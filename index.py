@@ -1,13 +1,17 @@
 import telebot
 import os
 from modules import utils, authentication
-from modules.states import States, states
+from modules.states import states
 from modules.db_manager import unauth_users
+
 bot = telebot.TeleBot(token = os.getenv('TOKEN'))
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    bot.send_message(message.chat.id, 'Hello')
+    if authentication.start_registration(message.from_user.id):
+        bot.send_message(message.chat.id, 'Write your fefu email to register')
+    else:
+        bot.send_message(message.chat.id, 'You have been already registered or started registration')
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_MAIL))
 def got_email(message):
@@ -31,15 +35,14 @@ def got_code(message):
 def got_full_name(message):
     full_name = utils.is_full_name(message.text)
     if full_name:
-        unauth_users.next_state(message.from_user.id)
-        unauth_users.update_name(message.from_user.id, full_name[1], full_name[0], full_name[2])
+        authentication.add_full_name(message.from_user.id, full_name)
     else:
         bot.send_message(message.chat.id, 'Invalid full name. Format: Last_name First_name Middle_name')
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_GROUP))
 def got_group(message):
-    if authentication.check_group(message.from_user.id, message.text):
-        register(message.from_user.id, message.text)
+    if utils.check_group(message.text):
+        authentication.register(message.from_user.id, message.text)
         bot.send_message(message.chat.id, 'Succesfully registered')
     else:
         bot.send_message(message.chat.id, 'Group not found')

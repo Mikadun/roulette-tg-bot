@@ -201,3 +201,6 @@ class Authenticated_users():
 
 unauth_users = Unauthenticated_users()
 auth_users = Authenticated_users()
+
+if __name__ == '__main__':
+	unauth_users.clear()
