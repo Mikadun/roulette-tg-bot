@@ -36,12 +36,13 @@ class Unauthenticated_users():
 		return self.cur.fetchall()
 
 	def add(self, user_id):
-		if self.check_user_id(user_id):
+		try:
+			self.cur.execute('''INSERT INTO "Unauthenticated_users" ("Tg_ID", "State") VALUES (%s, %s)''', (user_id, 0))
+			self.conn.commit()
+		except:
 			return -1
-
-		self.cur.execute('''INSERT INTO "Unauthenticated_users" ("Tg_ID", "State") VALUES (%s, %s)''', (user_id, 0))
-		self.conn.commit()
-		return 0
+		finally:
+			return 0
 
 	def update_name(self, user_id, f_name, m_name, l_name):
 		if not(self.check_user_id(user_id)):
