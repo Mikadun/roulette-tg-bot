@@ -27,9 +27,9 @@ def got_email(message):
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_CODE))
 def got_code(message):
     if authentication.check_code(message.from_user.id, message.text):
-        bot.send_message(message.chat.id, 'Write you group')
-    else:
         bot.send_message(message.chat.id, 'Write your full name in format: Last First Middle')
+    else:
+        bot.send_message(message.chat.id, 'Wrong code')
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_FULLNAME))
 def got_full_name(message):
