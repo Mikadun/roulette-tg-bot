@@ -54,12 +54,10 @@ class Unauthenticated_users():
 	def update_name(self, user_id, f_name, m_name, l_name):
 
 		try:
-			self.cur.execute('''UPDATE "Unauthenticated_users" SET "F_name" = %s where "Tg_ID" = %s''', (f_name, user_id))
-			self.cur.execute('''UPDATE "Unauthenticated_users" SET "M_name" = %s where "Tg_ID" = %s''', (m_name, user_id))
-			self.cur.execute('''UPDATE "Unauthenticated_users" SET "L_name" = %s where "Tg_ID" = %s''', (l_name, user_id))
-
 			state = self.get_state(user_id)
-			self.cur.execute('''UPDATE "Unauthenticated_users" SET "State" = %s where "Tg_ID" = %s''', (state+1, user_id))
+			self.cur.execute('''UPDATE "Unauthenticated_users" SET "F_name" = %s,"M_name" = %s, "L_name" = %s, "State" = %s where "Tg_ID" = %s''', 
+				(f_name, m_name, l_name, state+1, user_id))
+
 		except:
 			return False
 		else:
@@ -68,11 +66,8 @@ class Unauthenticated_users():
 
 	def update_email(self, user_id, email, code):
 		try:
-			self.cur.execute('''UPDATE "Unauthenticated_users" SET "Email" = %s where "Tg_ID" = %s''', (email, user_id))
-			self.cur.execute('''UPDATE "Unauthenticated_users" SET "Code" = %s where "Tg_ID" = %s''', (code, user_id))
-
 			state = self.get_state(user_id)
-			self.cur.execute('''UPDATE "Unauthenticated_users" SET "State" = %s where "Tg_ID" = %s''', (state+1, user_id))
+			self.cur.execute('''UPDATE "Unauthenticated_users" SET "Email" = %s, "Code" = %s, "State" = %s where "Tg_ID" = %s''', (email, code, state+1, user_id))
 		except:
 			return False
 		else:
