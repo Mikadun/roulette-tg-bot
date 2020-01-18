@@ -2,6 +2,7 @@ from enum import Enum
 from modules.db_manager import unauth_users
 
 class States(Enum):
+        S_DONT_EXIST = -1
         S_DEFAULT = 0
         S_ENTER_MAIL = 1
         S_ENTER_CODE = 2

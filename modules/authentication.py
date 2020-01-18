@@ -7,10 +7,11 @@ def send_code(user_id, email):
     code = randint(MIN, MAX)
     unauth_users.update_email(user_id, email)
     unauth_users.update_code(user_id, code)
+    unauth_users.next_state(user_id)
     verification_mail(email, code)
 
 def check_code(user_id, code):
-    if unauth_users.get_code(user_id) == code:
+    if str(unauth_users.get_code(user_id)) == code:
         unauth_users.next_state(user_id)
         return True
     return False
@@ -20,6 +21,7 @@ def start_registration(user_id):
         return False
     unauth_users.next_state(user_id)
     print(unauth_users.get_state(user_id))
+    return True
 
 def add_full_name(user_id, full_name):
     unauth_users.update_name(user_id, full_name[1], full_name[2], full_name[0])
