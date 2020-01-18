@@ -173,7 +173,7 @@ class Authenticated_users():
 		if self.check_email(email) or self.check_user_id(user_id):
 			return -1
 
-		self.cur.execute('''INSERT INTO "Authenticated_users" ("Tg_ID", "F_name", "M_name", "L_name", "Group", "Points", "Email") VALUES ()''', (user_id, f_name, m_name, l_name, group, 0, email))
+		self.cur.execute('''INSERT INTO "Authenticated_users" ("Tg_ID", "F_name", "M_name", "L_name", "Group", "Points", "Email") VALUES (%s, %s, %s, %s, %s, %s, %s)''', (user_id, f_name, m_name, l_name, group, 0, email))
 
 		self.conn.commit()
 		return 0
