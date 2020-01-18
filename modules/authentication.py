@@ -11,16 +11,17 @@ def send_code(user_id, email):
     verification_mail(email, code)
 
 def check_code(user_id, code):
-    if str(unauth_users.get_code(user_id)) == code:
-        unauth_users.next_state(user_id)
-        return True
-    return False
+    try:
+        if unauth_users.get_code(user_id) == int(code):
+            unauth_users.next_state(user_id)
+            return True
+    except:
+        return False
 
 def start_registration(user_id):
     if unauth_users.add(user_id) == -1:
         return False
     unauth_users.next_state(user_id)
-    print(unauth_users.get_state(user_id))
     return True
 
 def add_full_name(user_id, full_name):

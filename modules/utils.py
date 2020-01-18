@@ -5,7 +5,6 @@ def is_fefu_email(email):
     email = email.strip()
     if email.count('@dvfu.ru') + email.count('@students.dvfu.ru') == 1:
         email = email.split('@')[0]
-        print(email)
         if email.count('.') + email.count('_') == 1:
             for i in range(len(email)):
                 if (ord(email[i])<97 or ord(email[i])>122) and email[i]!='.' and email[i]!='_':
