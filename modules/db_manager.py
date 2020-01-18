@@ -32,7 +32,7 @@ class Unauthenticated_users():
 			return not(self.cur.fetchall() == [])
 		except:
 			return -1
-			
+
 	def show_all(self):
 		self.cur.execute('''SELECT * FROM "Unauthenticated_users"''')
 		return self.cur.fetchall()
@@ -116,6 +116,16 @@ class Unauthenticated_users():
 		state = self.get_state(user_id)
 
 		self.cur.execute('''UPDATE "Unauthenticated_users" SET "State" = %s where "Tg_ID" = %s''', (state+1, user_id))
+		self.conn.commit()
+		return 0
+
+	def back_state(self, user_id):
+		if not(self.check_user_id(user_id)):
+			return -1
+
+		state = self.get_state(user_id)
+
+		self.cur.execute('''UPDATE "Unauthenticated_users" SET "State" = %s where "Tg_ID" = %s''', (state-1, user_id))
 		self.conn.commit()
 		return 0
 
