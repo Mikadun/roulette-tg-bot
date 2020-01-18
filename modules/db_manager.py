@@ -119,6 +119,7 @@ class Unauthenticated_users():
 
 	def clear(self):
 		self.cur.execute('''DELETE FROM "Unauthenticated_users"''')
+		self.conn.commit()
 		return 0
 
 
@@ -204,6 +205,7 @@ class Authenticated_users():
 
 	def clear(self):
 		self.cur.execute('''DELETE FROM "Authenticated_users"''')
+		self.conn.commit()
 		return 0
 
 unauth_users = Unauthenticated_users()
