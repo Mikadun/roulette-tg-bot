@@ -119,7 +119,7 @@ class Unauthenticated_users():
 		self.conn.commit()
 		return 0
 
-	def back_state(self, user_id):
+	def previous_state(self, user_id):
 		if not(self.check_user_id(user_id)):
 			return -1
 
