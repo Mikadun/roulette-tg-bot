@@ -110,6 +110,10 @@ class Unauthenticated_users():
 		self.conn.commit()
 		return 0
 
+	def clear(self):
+		self.cur.execute('''DELETE FROM "Unauthenticated_users"''')
+		return 0
+
 
 
 class Authenticated_users():
@@ -190,6 +194,10 @@ class Authenticated_users():
 
 		self.cur.execute('''SELECT * FROM "Authenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
 		return self.cur.fetchall()[0]
+
+	def clear(self):
+		self.cur.execute('''DELETE FROM "Authenticated_users"''')
+		return 0
 
 unauth_users = Unauthenticated_users()
 auth_users = Authenticated_users()
