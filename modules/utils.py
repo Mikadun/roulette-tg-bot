@@ -13,9 +13,6 @@ def is_fefu_email(email):
             return True
     return False
 
-def is_group(message):
-    return True
-
 def is_full_name(name):
     data = name.split()
     if len(data) != 3:
@@ -25,3 +22,6 @@ def is_full_name(name):
         if not i.isalpha():
             return False
     return data
+
+def check_group(group):
+    return True
