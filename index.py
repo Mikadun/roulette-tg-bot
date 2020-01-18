@@ -29,13 +29,14 @@ def got_code(message):
     if authentication.check_code(message.from_user.id, message.text):
         bot.send_message(message.chat.id, 'Write you group')
     else:
-        bot.send_message(message.chat.id, 'Wrong code')
+        bot.send_message(message.chat.id, 'Write your full name in format: Фамилия Имя Отчество')
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_FULLNAME))
 def got_full_name(message):
     full_name = utils.is_full_name(message.text)
     if full_name:
         authentication.add_full_name(message.from_user.id, full_name)
+        bot.send_message(message.chat.id, 'Write you group')
     else:
         bot.send_message(message.chat.id, 'Invalid full name. Format: Last_name First_name Middle_name')
 
