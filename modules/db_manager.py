@@ -4,10 +4,9 @@ import psycopg2
 
 class Unauthenticated_users():
 	def __init__(self):
-
-		self.conn = psycopg2.connect(dbname='***REMOVED***', user='***REMOVED***', 
-									password='***REMOVED***', 
-									host='***REMOVED***')
+		self.conn = psycopg2.connect(dbname=os.getenv('DB_NAME'), user=os.getenv('DB_NAME'), 
+									password=os.getenv('DB_PASSWORD'), 
+									host=os.getenv('DB_HOST'))
 		self.cur = self.conn.cursor()
 
 	def __del__(self):
@@ -156,9 +155,9 @@ class Unauthenticated_users():
 
 class Authenticated_users():
 	def __init__(self):
-		self.conn = psycopg2.connect(dbname='***REMOVED***', user='***REMOVED***', 
-									password='***REMOVED***', 
-									host='***REMOVED***')
+		self.conn = psycopg2.connect(dbname=os.getenv('DB_NAME'), user=os.getenv('DB_NAME'), 
+									password=os.getenv('DB_PASSWORD'), 
+									host=os.getenv('DB_HOST'))
 		self.cur = self.conn.cursor()
 
 	def __del__(self):
