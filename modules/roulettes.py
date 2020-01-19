@@ -1,5 +1,10 @@
 import random
 
-def coin():
-    if random.randint(0, 1)==1: return "Орёл"
-    else retun "Решка"
+def coin(*args):
+    if args == None:
+        return random.choice(('heads', 'tails'))
+    else:
+        return random.choice(args)
+
+if __name__ == '__main__':
+    print()
