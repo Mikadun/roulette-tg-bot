@@ -27,9 +27,9 @@ class Russian_roulette():
 		try:
 			self.cur.execute('''SELECT * FROM "Russian_roulette" WHERE ("Reference_ID" = %s)''', (ref_id, ))
 			temp = self.cur.fetchall()[0]
-			self.cur.execute('''UPDATE "Russian_roulette" SET "Shoots" = %s where "Reference_ID" = %s''', (temp[2]+1, ref_id))
+			self.cur.execute('''UPDATE "Russian_roulette" SET "Shoots" = %s where "Reference_ID" = %s''', (temp[3]+1, ref_id))
 			self.conn.commit()
-			return [(temp[2]+1 == temp[3]), temp[4]]
+			return [(temp[3]+1 == temp[4]), temp[5]]
 		except:
 			return False	
 
