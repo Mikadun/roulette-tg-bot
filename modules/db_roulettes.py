@@ -15,30 +15,23 @@ class Russian_roulette():
 		self.cur.close()
 		self.conn.close()
 
-	def add(self, ref_id, magazine, misfire):
+	def add(self, ref_id, magazine, bullet, misfire):
 		try:
-			self.cur.execute('''INSERT INTO "Russian_roulette" ("Reference_ID", "Magazine", "Shoots", "Misfire") VALUES (%s, %s, %s, %s)''', (ref_id, magazine, 0, misfire))
+			self.cur.execute('''INSERT INTO "Russian_roulette" ("Reference_ID", "Magazine", "Shoots", "Bullet", "Misfire") VALUES (%s, %s, %s, %s, %s)''', (ref_id, magazine, 0, bullet, misfire))
 			self.conn.commit()
 			return True
 		except:
 			return False
 
-	def make_shoot(self, ref_id):
+	def shoot(self, ref_id):
 		try:
 			self.cur.execute('''SELECT * FROM "Russian_roulette" WHERE ("Reference_ID" = %s)''', (ref_id, ))
-			temp = self.cur.fetchall()[0][2]
-			self.cur.execute('''UPDATE "Russian_roulette" SET "Shoots" = %s where "Reference_ID" = %s''', (temp+1, ref_id))
+			temp = self.cur.fetchall()[0]
+			self.cur.execute('''UPDATE "Russian_roulette" SET "Shoots" = %s where "Reference_ID" = %s''', (temp[2]+1, ref_id))
 			self.conn.commit()
-			return temp+1
+			return [(temp[2]+1 == temp[3]), temp[4]]
 		except:
 			return False	
-
-	def get_info(self, ref_id):
-		try:
-			self.cur.execute('''SELECT * FROM "Russian_roulette" WHERE ("Reference_ID" = %s)''', (ref_id, ))
-			return self.cur.fetchall()[0][2:] #return magazine, shoots and misfire only
-		except:
-			return False
 
 	def delete(self, ref_id):
 		try:
@@ -47,5 +40,5 @@ class Russian_roulette():
 			return True
 		except:
 			return False
-			
+
 russian_roulette = Russian_roulette()
