@@ -260,7 +260,7 @@ class Authenticated_users():
 	def get_users_by_group(self, group):
 		try:
 			self.cur.execute('''SELECT * FROM "Authenticated_users" WHERE ("Group" = %s)''', (group, ))
-			return [i[1] for i in self.cur.fetchall()[0]]
+			return [i[1] for i in self.cur.fetchall()]
 		except:
 			return False
 
