@@ -35,7 +35,7 @@ class Russian_roulette():
 
 			self.conn.commit()
 			return [(temp[3]+1 == temp[4]), temp[5]]
-		except as E:
+		except Exception as E:
 			print(E)
 			return False	
 
