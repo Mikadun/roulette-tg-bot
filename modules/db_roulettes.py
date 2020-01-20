@@ -29,19 +29,18 @@ class Russian_roulette():
 			temp = self.cur.fetchall()[0]
 
 			if (temp[3]+1 == temp[4]):
-				self.cur.execute('''DELETE FROM "Russian_roulette" WHERE ("Reference_ID = %s")''', (ref_id, ))
+				self.cur.execute('''DELETE FROM "Russian_roulette" WHERE ("Reference_ID" = %s)''', (ref_id, ))
 			else:
 				self.cur.execute('''UPDATE "Russian_roulette" SET "Shoots" = %s where "Reference_ID" = %s''', (temp[3]+1, ref_id))
 
 			self.conn.commit()
 			return [(temp[3]+1 == temp[4]), temp[5]]
-		except Exception as E:
-			print(E)
+		except:
 			return False	
 
 	def delete(self, ref_id):
 		try:
-			self.cur.execute('''DELETE FROM "Russian_roulette" WHERE ("Reference_ID = %s")''', (ref_id, ))
+			self.cur.execute('''DELETE FROM "Russian_roulette" WHERE ("Reference_ID" = %s)''', (ref_id, ))
 			self.conn.commit()
 			return True
 		except:
