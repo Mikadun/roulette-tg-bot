@@ -29,7 +29,7 @@ class Russian_roulette():
 			temp = self.cur.fetchall()[0]
 
 			if (temp[3]+1 == temp[4]):
-				self.delete(ref_id)
+				self.cur.execute('''DELETE FROM "Russian_roulette" WHERE ("Reference_ID = %s")''', (ref_id, ))
 			else:
 				self.cur.execute('''UPDATE "Russian_roulette" SET "Shoots" = %s where "Reference_ID" = %s''', (temp[3]+1, ref_id))
 
