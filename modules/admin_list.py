@@ -13,9 +13,11 @@ class Admin_list():
 		self.cur.close()
 		self.conn.close()
 
-	check(self, user_id):
+	def check(self, user_id):
 		try:
 			self.cur.execute('''SELECT * FROM "Admin_list" WHERE ("Tg_ID" = %s)''', (user_id,))
 			return not(self.cur.fetchall() == [])
 		except:
 			return -1
+
+admin_list = Admin_list()
