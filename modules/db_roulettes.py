@@ -28,7 +28,7 @@ class Russian_roulette():
 			self.cur.execute('''SELECT * FROM "Russian_roulette" WHERE ("Reference_ID" = %s)''', (ref_id, ))
 			temp = self.cur.fetchall()[0]
 		except Exception as e:
-			print(e)
+			print(1, e)
 			return False
 
 		try:
@@ -40,7 +40,7 @@ class Russian_roulette():
 			self.conn.commit()
 			return [(temp[3]+1 == temp[4]), temp[5]]
 		except Exception as e:
-			print(e)
+			print(2, e)
 			return False	
 
 	def delete(self, ref_id):
