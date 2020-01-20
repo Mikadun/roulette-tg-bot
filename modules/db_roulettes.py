@@ -35,7 +35,8 @@ class Russian_roulette():
 
 			self.conn.commit()
 			return [(temp[3]+1 == temp[4]), temp[5]]
-		except:
+		except as E:
+			print(E)
 			return False	
 
 	def delete(self, ref_id):
