@@ -41,4 +41,12 @@ class Russian_roulette():
 		except:
 			return False
 
+	def clear(self):
+		try:
+			self.cur.execute('''DELETE FROM "Russian_roulette"''')
+			self.conn.commit()
+			return True
+		except:
+			return False
+
 russian_roulette = Russian_roulette()
