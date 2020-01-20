@@ -13,6 +13,13 @@ class Admin_list():
 		self.cur.close()
 		self.conn.close()
 
+	def add(self, user_id):
+		try:
+			self.cur.execute('''INSERT INTO "Admin_list" ("Tg_ID") VALUES (%s)''', (user_id,))
+			return True
+		except:
+			return False
+
 	def check(self, user_id):
 		try:
 			self.cur.execute('''SELECT * FROM "Admin_list" WHERE ("Tg_ID" = %s)''', (user_id,))
