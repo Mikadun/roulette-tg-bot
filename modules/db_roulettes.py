@@ -40,4 +40,12 @@ class Russian_roulette():
 		except:
 			return False
 
+	def delete(self, ref_id):
+		try:
+			self.cur.execute('''DELETE FROM "Russian_roulette" WHERE ("Reference_ID = %s")''', (ref_id, ))
+			self.conn.commit()
+			return True
+		except:
+			return False
+			
 russian_roulette = Russian_roulette()
