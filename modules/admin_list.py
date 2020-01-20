@@ -16,10 +16,11 @@ class Admin_list():
 	def add(self, user_id):
 		try:
 			self.cur.execute('''INSERT INTO "Admin_list" ("Tg_ID") VALUES (%s)''', (user_id,))
-			self.conn.commit()
-			return True
 		except:
 			return False
+		else:
+			self.conn.commit()
+			return True
 
 	def check(self, user_id):
 		try:
