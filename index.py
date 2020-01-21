@@ -32,5 +32,22 @@ def russian_roulette_shoot(message):
 	else:
 		bot.send_message(message.chat.id, "You haven't start roulette. Write /russian")
 
+@bot.message_handler(commands=['chose'])
+def chose_line(message):
+	try:
+		text = message.text.split('\n')[1:]
+		bot.send_message(message.chat.id, roulettes.chose_line(text))
+	except:
+		bot.send_message(message.chat.id, 'Invalid command. Must have lines below command')
+
+@bot.message_handler(commands=['random'])
+def random_ab(message):
+	try:
+		a, b = map(int, message.text.split()[1:])
+		bot.send_message(message.chat.id, 'Result: {}'.format(roulettes.random(a, b)))
+	except:
+		bot.send_message(message.chat.id, 'Invalid command')
+
+
 print('Bot is running')
 bot.polling()

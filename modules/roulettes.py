@@ -1,5 +1,6 @@
 from modules.db_roulettes import russian_roulette
-from random import randint
+from random import randint, choice
+from secrets import choice
 
 def russian_roulette_start(reference_id, magazine = 6, misfire = 0):
     bullet = randint(1, magazine)
@@ -14,5 +15,11 @@ def russian_roulette_shoot(reference_id):
         return is_bullet and not misfire > randint(0, 100)
     else:
         return -1
+
+def chose_line(text):
+    return choice(text)
+
+def random(A, B):
+    return randint(A, B)
 
 russian_roulette.clear()
