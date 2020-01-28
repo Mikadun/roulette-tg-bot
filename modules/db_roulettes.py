@@ -15,9 +15,9 @@ class Classic_roulette():
 		self.cur.close()
 		self.conn.close()
 
-	def add(self, ref_id, user_id, bet, value):
+	def add(self, ref_id, user_id, place, bet):
 		try:
-			self.cur.execute('''INSERT INTO "Russian_roulette" ("Reference_ID", "Tg_ID", "Bet", "Value") VALUES (%s, %s, %s, %s)''', (ref_id, user_id, bet, value))
+			self.cur.execute('''INSERT INTO "Russian_roulette" ("Reference_ID", "Tg_ID", "Place", "Bet") VALUES (%s, %s, %s, %s)''', (ref_id, user_id, place, bet))
 		except:
 			return False
 		else:
