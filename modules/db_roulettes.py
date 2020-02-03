@@ -17,6 +17,11 @@ class Classic_roulette():
 
 	def add(self, ref_id, user_id, place, bet):
 		try:
+			self.cur.execute('''SELECT "Bet" FROM "Classic_roulette" WHERE ("Reference_ID" = %s AND "Tg_ID" = %s AND "Place" = %s)''', (ref_id, user_id, place))
+			
+			if (self.cur.fetchall() != []):
+				return -1
+
 			self.cur.execute('''INSERT INTO "Classic_roulette" ("Reference_ID", "Tg_ID", "Place", "Bet") VALUES (%s, %s, %s, %s)''', (ref_id, user_id, place, bet))
 		except:
 			return False
@@ -46,10 +51,11 @@ class Classic_roulette():
 			else:
 				return temp[0][0]
 
-	def update_bet(self, ref_id, user_id, place, bet):
+	def increase_bet(self, ref_id, user_id, place):
 		try:
+			temp = get_bet(ref_id, user_id, place)
 			self.cur.execute('''UPDATE "Classic_roulette" SET "Bet" = %s WHERE ("Reference_ID" = %s AND "Tg_ID" = %s AND "Place" = %s)''', 
-				(bet, ref_id, user_id, place))
+				(temp+1, ref_id, user_id, place))
 		except:
 			return False
 		else:
