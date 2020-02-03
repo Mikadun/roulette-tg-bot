@@ -46,4 +46,14 @@ class Classic_roulette():
 			else:
 				return temp[0][0]
 
+	def update_bet(self, ref_id, user_id, place, bet):
+		try:
+			self.cur.execute('''UPDATE "Classic_roulette" SET "Bet" = %s WHERE ("Reference_ID" = %s AND "Tg_ID" = %s AND "Place" = %s)''', 
+				(bet, ref_id, user_id, place))
+		except:
+			return False
+		else:
+			self.conn.commit()
+			return True
+
 classic_roulette = Classic_roulette()
