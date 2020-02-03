@@ -17,7 +17,7 @@ class Classic_roulette():
 
 	def add(self, ref_id, user_id, place, bet):
 		try:
-			self.cur.execute('''INSERT INTO "Russian_roulette" ("Reference_ID", "Tg_ID", "Place", "Bet") VALUES (%s, %s, %s, %s)''', (ref_id, user_id, place, bet))
+			self.cur.execute('''INSERT INTO "Classic_roulette" ("Reference_ID", "Tg_ID", "Place", "Bet") VALUES (%s, %s, %s, %s)''', (ref_id, user_id, place, bet))
 		except:
 			return False
 		else:
@@ -32,5 +32,18 @@ class Classic_roulette():
 		else:
 			self.conn.commit()
 			return True
+
+	def get_bet(self, ref_id, user_id, place):
+		try:
+			self.cur.execute('''SELECT "Bet" FROM "Classic_roulette" WHERE ("Reference_ID" = %s AND "Tg_ID" = %s AND "Place" = %s)''', (ref_id, user_id, place))
+		except:
+			return False
+		else:
+			temp = self.cur.fetchall()
+
+			if (temp == []):
+				return False
+			else:
+				return temp[0][0]
 
 classic_roulette = Classic_roulette()
