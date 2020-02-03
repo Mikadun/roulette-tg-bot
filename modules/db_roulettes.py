@@ -17,12 +17,13 @@ class Classic_roulette():
 
 	def add(self, ref_id, user_id, place, bet):
 		try:
-			self.cur.execute('''SELECT "Bet" FROM "Classic_roulette" WHERE ("Reference_ID" = %s AND "Tg_ID" = %s AND "Place" = %s)''', (ref_id, user_id, place))
-			
-			if (self.cur.fetchall() != []):
-				return -1
+			temp = self.get_bet(ref_id, user_id, place)
 
-			self.cur.execute('''INSERT INTO "Classic_roulette" ("Reference_ID", "Tg_ID", "Place", "Bet") VALUES (%s, %s, %s, %s)''', (ref_id, user_id, place, bet))
+			if (temp == -1):
+				self.cur.execute('''INSERT INTO "Classic_roulette" ("Reference_ID", "Tg_ID", "Place", "Bet") VALUES (%s, %s, %s, %s)''', (ref_id, user_id, place, bet))
+			elif (temp != False):
+				self.cur.execute('''UPDATE "Classic_roulette" SET "Bet" = %s WHERE ("Reference_ID" = %s AND "Tg_ID" = %s AND "Place" = %s)''', 
+				(temp+1, ref_id, user_id, place))	
 		except:
 			return False
 		else:
@@ -47,19 +48,18 @@ class Classic_roulette():
 			temp = self.cur.fetchall()
 
 			if (temp == []):
-				return False
+				return -1
 			else:
 				return temp[0][0]
 
-	def increase_bet(self, ref_id, user_id, place):
+	def get_bets(self, ref_id):
 		try:
-			temp = get_bet(ref_id, user_id, place)
-			self.cur.execute('''UPDATE "Classic_roulette" SET "Bet" = %s WHERE ("Reference_ID" = %s AND "Tg_ID" = %s AND "Place" = %s)''', 
-				(temp+1, ref_id, user_id, place))
+			self.cur.execute('''SELECT ("Tg_ID", "Place", "Bet") FROM "Classic_roulette" WHERE ("Reference_ID" = %s)''', (ref_id,))
 		except:
 			return False
 		else:
-			self.conn.commit()
-			return True
+			return self.cur.fetchall()
+
+
 
 classic_roulette = Classic_roulette()
