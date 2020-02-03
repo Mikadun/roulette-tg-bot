@@ -1,8 +1,9 @@
 import telebot
-from modules.utils import getToken
+
+import os
 from modules.db_roulettes import Classic_roulette
 
-bot = telebot.TeleBot(token = getToken())
+bot = telebot.TeleBot(token = os.getenv('TOKEN'))
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
