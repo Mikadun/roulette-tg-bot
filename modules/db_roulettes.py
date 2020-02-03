@@ -51,10 +51,10 @@ class Roulette():
 
 	def get_users(self, ref_id):
 		try:
-			self.cur.execute('''SELECT FROM "Roulette_users" WHERE ("Reference_ID" = %s)''', (ref_id, ))
+			self.cur.execute('''SELECT "Tg_ID" FROM "Roulette_users" WHERE ("Reference_ID" = %s)''', (ref_id, ))
 		except:
 			return False
 		else:
-			return self.cur.fetchall[0]
+			return [i[0] for i in self.cur.fetchall()]
 
 roulette = Roulette()
