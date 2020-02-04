@@ -10,7 +10,7 @@ def send_mail(host_mail, host_password, subject, receiver, content):
     message['Subject'] = subject
     message.attach(MIMEText(content, 'plain'))
     message = message.as_string()
-    smtp = smtplib.SMTP('smtp.gmail.com', 587)
+    smtp = smtplib.SMTP('smtp.gmail.com', os.getenv('PORT', 587))
     smtp.starttls()
     smtp.login(host_mail, host_password)
     smtp.sendmail(host_mail, receiver, message)
