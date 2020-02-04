@@ -10,11 +10,11 @@ def send_mail(host_mail, host_password, subject, receiver, content):
     message['Subject'] = subject
     message.attach(MIMEText(content, 'plain'))
     message = message.as_string()
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(host_mail, host_password)
-    server.sendmail(host_mail, receiver, message)
-    server.quit()
+    smtp = smtplib.SMTP('smtp.gmail.com', 587)
+    smtp.starttls()
+    smtp.login(host_mail, host_password)
+    smtp.sendmail(host_mail, receiver, message)
+    smtp.quit()
 
 def verification_mail(receiver, code):
     host = os.getenv('EMAIL_HOST')
