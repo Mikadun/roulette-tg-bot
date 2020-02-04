@@ -78,4 +78,4 @@ if __name__ == "__main__":
             bot.set_webhook("https://{}.herokuapp.com/{}".format(APP_NAME, TOKEN))
             return "!", 200
 
-        server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+        server.run(host="0.0.0.0", port=int(os.getenv('PORT', 5000)))
