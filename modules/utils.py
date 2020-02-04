@@ -1,16 +1,26 @@
 import json
+from modules.db_manager import unauth_users, auth_users
 
-def getToken():
-    file_path = 'telegram-token.json'
-    try:
-        return json.load(open(file_path))['token']
-    except:
-        print('Miss token file. Write your telegram bot token here')
-        token = input()
-        for c in [' ', '\n', '"', "'"]:
-            token = token.strip(c)
-        json.dump({'token': token}, open(file_path, 'w'))
-        return getToken()
+def is_fefu_email(email):
+    email = email.strip()
+    if email.count('@dvfu.ru') + email.count('@students.dvfu.ru') == 1:
+        email = email.split('@')[0]
+        if email.count('.') + email.count('_') == 1:
+            for i in range(len(email)):
+                if (ord(email[i])<97 or ord(email[i])>122) and email[i]!='.' and email[i]!='_':
+                    return False
+            return True
+    return False
 
-if __name__ == '__main__':
-    print(getToken())
+def is_full_name(name):
+    data = name.lower().title().split()
+    if len(data) != 3:
+        return False
+
+    for i in data:
+        if not i.isalpha():
+            return False
+    return data
+
+def check_group(group):
+    return True
