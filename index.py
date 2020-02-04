@@ -1,13 +1,15 @@
 import telebot
 import os
+from flask import Flask, request
 from modules import utils, authentication
 from modules.states import states
 from modules.db_manager import unauth_users
 
-APP_NAME = os.getenv('APP_NAME')
+APP_NAME = os.getenv('HEROKU_APP_NAME')
 TOKEN = os.getenv('TOKEN')
 
 bot = telebot.TeleBot(TOKEN)
+server = Flask(__name__)
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
@@ -57,5 +59,16 @@ def any_message(message):
 
 print('Bot is running')
 
-bot.set_webhook("https://{}.herokuapp.com/{}".format(APP_NAME, TOKEN))
-bot.polling()
+@server.route('/' + TOKEN, methods=['POST'])
+def get_message():
+	bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+	return "!", 200
+
+@server.route("/")
+def webhook():
+	bot.remove_webhook()
+	bot.set_webhook("https://{}.herokuapp.com/{}".format(APP_NAME, TOKEN))
+	return "!", 200
+
+if __name__ == "__main__":
+   server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
