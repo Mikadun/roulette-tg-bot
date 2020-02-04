@@ -4,7 +4,10 @@ from modules import utils, authentication
 from modules.states import states
 from modules.db_manager import unauth_users
 
-bot = telebot.TeleBot(token = os.getenv('TOKEN'))
+APP_NAME = os.getenv('APP_NAME')
+TOKEN = os.getenv('TOKEN')
+
+bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
@@ -53,4 +56,6 @@ def any_message(message):
     bot.send_message(message.chat.id, 'Write /help for command list')
 
 print('Bot is running')
+
+bot.set_webhook("https://{}.herokuapp.com/{}".format(APP_NAME, TOKEN))
 bot.polling()
