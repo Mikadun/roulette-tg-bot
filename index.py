@@ -61,12 +61,14 @@ def random_ab(message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
-    if auth_users.get_points(call.from_user.id)[0] > 0:
-        classic_roulette.add(call.message.chat.id, call.from_user.id, call.data)
-        bot.answer_callback_query(call.id, "Your bet on "+call.data+" is "+str(classic_roulette.get_bet(call.message.chat.id, call.from_user.id, call.data))+" points now.")
-    else:
-        bot.answer_callback_query(call.id, "No more points left!")
-    #bot.send_message(call.message.chat.id, call.from_user.first_name+' '+call.from_user.last_name+' just made bet on '+call.data)
+    try:
+        if auth_users.get_points(call.from_user.id)[0] > 0:
+            classic_roulette.add(call.message.chat.id, call.from_user.id, call.data)
+            bot.answer_callback_query(call.id, "Your bet on "+call.data+" is "+str(classic_roulette.get_bet(call.message.chat.id, call.from_user.id, call.data))+" points now.")
+        else:
+            bot.answer_callback_query(call.id, "No more points left!")
+    except:
+        bot.answer_callback_query(call.id, "You are not registered!")
 
 @bot.message_handler(commands=['classic'])
 def classic_bets(message):
