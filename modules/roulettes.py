@@ -23,20 +23,20 @@ def classic(players):
     for i in players:
         if res.get(i[0]) == None:
             res[i[0]] = 0
-        if i[1] == 'Even' and x in even:
-            res[i[0]] += int(i[2])*2
-        elif i[1] == 'Odd' and x in odd:
-            res[i[0]] += int(i[2])*2
-        elif i[1] == 'Red' and x in red:
-            res[i[0]] += int(i[2])*2
-        elif i[1] == 'Black' and x in black:
-            res[i[0]] += int(i[2])*2
-        elif i[1] == '1-18' and x in L:
-            res[i[0]] += int(i[2])*2
-        elif i[1] == '19-36' and x in H:
-            res[i[0]] += int(i[2])*2
-        elif int(i[1]) == x:
-            res[i[0]] += int(i[2])*36
+        if i[1].strip() == 'Even' and x in even:
+            res[i[0]] += i[2]*2
+        elif i[1].strip()  == 'Odd' and x in odd:
+            res[i[0]] += i[2]*2
+        elif i[1].strip()  == 'Red' and x in red:
+            res[i[0]] += i[2]*2
+        elif i[1].strip()  == 'Black' and x in black:
+            res[i[0]] += i[2]*2
+        elif i[1].strip()  == '1-18' and x in L:
+            res[i[0]] += i[2]*2
+        elif i[1].strip()  == '19-36' and x in H:
+            res[i[0]] += i[2]*2
+        elif int(i[1].strip()) == x:
+            res[i[0]] += i[2]*36
     return res 
 
 def russian_roulette_start(reference_id, magazine = 6, misfire = 0):
