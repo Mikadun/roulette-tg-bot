@@ -63,7 +63,7 @@ class Classic_roulette():
 
 	def get_bets(self, ref_id):
 		try:
-			self.cur.execute('''SELECT ("Tg_ID", "Place", "Bet") FROM "Classic_roulette" WHERE ("Reference_ID" = %s)''', (ref_id,))
+			self.cur.execute('''SELECT "Tg_ID", "Place", "Bet" FROM "Classic_roulette" WHERE ("Reference_ID" = %s)''', (ref_id,))
 		except:
 			return False
 		else:
