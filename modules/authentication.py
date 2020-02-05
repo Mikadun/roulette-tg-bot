@@ -27,5 +27,5 @@ def register(user_id, group):
     auth_users.add(*info[1:5], group, info[6])
     unauth_users.delete(user_id)
 
-unauth_users.clear()
-auth_users.clear()
+#unauth_users.clear()
+#auth_users.clear()
