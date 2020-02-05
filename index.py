@@ -179,7 +179,7 @@ def admin_panel_add_points_2(message, user_id):
 		bot.send_message(message.chat.id, "Something going wrong")
 		admin_panel_main(message)
 	else:
-		bot.send_message(message.chat.id, "OK")
+		bot.send_message(message.chat.id, "Points was added")
 		admin_panel_main(message)
 
 def admin_panel_remove_points_1(message):
@@ -200,7 +200,7 @@ def admin_panel_remove_points_2(message, user_id):
 		bot.send_message(message.chat.id, "Something going wrong")
 		admin_panel_main(message)
 	else:
-		bot.send_message(message.chat.id, "OK")
+		bot.send_message(message.chat.id, "Points was removed")
 		admin_panel_main(message)
 
 def admin_panel_delete_user_1(message):
@@ -225,9 +225,12 @@ def admin_panel_delete_user_2(message, user_id):
 		else:
 			bot.send_message(message.chat.id, "User was deleted")
 			admin_panel_main(message)
-	else:
+	elif message.text=="NO":
 		bot.send_message(message.chat.id, "OK")
 		admin_panel_main(message)
+	else:
+		bot.send_message(message.chat.id, "Invalid command")
+		admin_panel_main(message)		
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_MAIL))
 def got_email(message):
