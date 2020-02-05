@@ -3,9 +3,11 @@ from flask import Flask, request
 from modules import utils, authentication
 from modules.states import states
 from modules.db_manager import unauth_users
+from modules.db_manager import auth_users
 from modules import roulettes
 from modules.db_admin_list import admin_list
 import telebot
+from telebot import types
 
 TOKEN = os.getenv('TOKEN')
 
@@ -58,12 +60,18 @@ def random_ab(message):
 		bot.send_message(message.chat.id, 'Invalid command')
 
 @bot.message_handler(commands=['admin'])
-def admin_panel(message):
+def admin_panel_1(message):
 	try:
 		if message.chat.type == "private":
 			if admin_list.check(message.from_user.id):
-				markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
-				markup.add('1', '2') #Имена кнопок
+				markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+
+				markup.row("Список зарегестрированных пользователей")
+				markup.row("Список зарегестрированных пользователей по группе")
+				markup.row("Добавить очки", "Отнять очки")
+				markup.row("Информация о пользователе", "Список групп")
+				markup.row("Удалить пользователя")
+				
 				msg = bot.reply_to(message, 'Test text', reply_markup=markup)
 				bot.register_next_step_handler(msg, process_step)
 
