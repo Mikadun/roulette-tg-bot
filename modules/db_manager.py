@@ -257,13 +257,6 @@ class Authenticated_users():
 			self.conn.commit()
 			return True
 
-	def get_users_by_group(self, group):
-		try:
-			self.cur.execute('''SELECT * FROM "Authenticated_users" WHERE ("Group" = %s)''', (group, ))
-			return [i[1] for i in self.cur.fetchall()]
-		except:
-			return False
-
 	def get_points(self, user_id):
 		try:
 			self.cur.execute('''SELECT "Points" FROM "Authenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
