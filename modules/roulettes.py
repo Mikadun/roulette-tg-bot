@@ -3,17 +3,8 @@ from random import randint, choice
 from secrets import choice
 
 def classic(players):
-    even, odd, red, black, L, H = [],[],[],[],[],[]
     red = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
     for i in range(1, 37):
-        if i%2 == 0:
-            even.append(i)
-        else:
-            odd.append(i)
-        if i<=18:
-            L.append(i)
-        else:
-            H.append(i)
         if i not in red:
             black.append(i)
     x = randint(0, 36)
@@ -21,19 +12,20 @@ def classic(players):
     res = {}
     res["x"] = x
     for i in players:
+        print(i[1].strip()  == 'Odd')
         if res.get(i[0]) == None:
             res[i[0]] = 0
-        if i[1].strip() == 'Even' and x in even:
+        if i[1].strip() == 'Even' and x%2 == 0:
             res[i[0]] += i[2]*2
-        elif i[1].strip()  == 'Odd' and x in odd:
+        elif i[1].strip()  == 'Odd':
             res[i[0]] += i[2]*2
         elif i[1].strip()  == 'Red' and x in red:
             res[i[0]] += i[2]*2
         elif i[1].strip()  == 'Black' and x in black:
             res[i[0]] += i[2]*2
-        elif i[1].strip()  == '1-18' and x in L:
+        elif i[1].strip()  == '1-18' and x<=18:
             res[i[0]] += i[2]*2
-        elif i[1].strip()  == '19-36' and x in H:
+        elif i[1].strip()  == '19-36':
             res[i[0]] += i[2]*2
         elif int(i[1].strip()) == x:
             res[i[0]] += i[2]*36
