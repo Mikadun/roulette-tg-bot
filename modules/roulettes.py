@@ -19,6 +19,7 @@ def classic(players):
     x = randint(0, 36)
     print(x)
     res = {}
+    res["x"] = x
     for i in players:
         if res.get(i[0]) == None:
             res[i[0]] = 0

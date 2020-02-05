@@ -2,11 +2,11 @@ import telebot
 import os
 from flask import Flask, request
 
-from modules.db_roulettes import Classic_roulette
+from modules.db_roulettes import сlassic_roulette
 from modules.keyboard import gen_markup
 from modules import utils, authentication
 from modules.states import states
-from modules.db_manager import unauth_users
+from modules.db_manager import unauth_users, auth_users
 from modules import roulettes
 
 TOKEN = os.getenv('TOKEN')
@@ -61,12 +61,27 @@ def random_ab(message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
-	bot.answer_callback_query(call.id, "You made a bet on "+call.data)
-	#bot.send_message(call.message.chat.id, call.from_user.first_name+' '+call.from_user.last_name+' just made bet on '+call.data)
+    if :
+        classic_roulette.add(call.message.chat.id, call.from_user.id, call.data)
+        bot.answer_callback_query(call.id, "Your bet on "+call.data+" is "+str(classic_roulette.get_bet(call.message.chat.id, call.from_user.id, call.data))+" points now.")
+    else:
+        bot.answer_callback_query(call.id, "No more points left!")
+    #bot.send_message(call.message.chat.id, call.from_user.first_name+' '+call.from_user.last_name+' just made bet on '+call.data)
 
-@bot.message_handler(commands=['bet'])
-def message_handler(message):
-	bot.send_message(message.chat.id, "Make your bet:", reply_markup=gen_markup())
+@bot.message_handler(commands=['classic'])
+def classic_bets(message):
+    bot.send_message(message.chat.id, "Classic roulette begin! Make your bets:", reply_markup=gen_markup())
+
+@bot.message_handler(commands=['begin'])
+def classic_start(message):
+    res = roulettes.classic(classic_roulette.get_bets(call.message.chat.id))
+    for i in res:
+        if i == "x":
+            bot.send_message(message.chat.id, 'And result is... '+str(res[i])+'!')
+        else:
+            auth_users.add_points(i, res[i])
+            bot.send_message(message.chat.id, auth_users.get_info(i)[0][2]+auth_users.get_info(i)[0][4]+' got '+str(res[i])+'points!')
+    сlassic_roulette.delete(message.chat.id)
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_MAIL))
 def got_email(message):
