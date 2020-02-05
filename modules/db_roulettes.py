@@ -30,9 +30,18 @@ class Classic_roulette():
 			self.conn.commit()
 			return True
 
-	def delete(self, ref_id, user_id):
+	def delete_user(self, ref_id, user_id):
 		try:
 			self.cur.execute('''DELETE FROM "Classic_roulette" WHERE ("Reference_ID = %s" AND "Tg_ID = %s")''', (ref_id, user_id))
+		except:
+			return False
+		else:
+			self.conn.commit()
+			return True
+
+	def delete(self, ref_id):
+		try:
+			self.cur.execute('''DELETE FROM "Classic_roulette" WHERE ("Reference_ID = %s")''', (ref_id,))
 		except:
 			return False
 		else:

@@ -264,6 +264,13 @@ class Authenticated_users():
 		except:
 			return False
 
+	def get_points(self, user_id):
+		try:
+			self.cur.execute('''SELECT "Points" FROM "Authenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
+			return self.cur.fetchall()
+		except:
+			return False
+
 unauth_users = Unauthenticated_users()
 auth_users = Authenticated_users()
 
