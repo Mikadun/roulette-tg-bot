@@ -75,6 +75,7 @@ def admin_panel(message):
 		else:
 			bot.send_message(message.chat.id, 'Admin panel work only in private chat')
 	except:
+		print("Err")
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_MAIL))
 def got_email(message):
