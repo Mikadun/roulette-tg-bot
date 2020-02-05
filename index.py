@@ -1,4 +1,3 @@
-import telebot
 import os
 from flask import Flask, request
 from modules import utils, authentication
@@ -6,6 +5,7 @@ from modules.states import states
 from modules.db_manager import unauth_users
 from modules import roulettes
 from modules.db_admin_list import admin_list
+import telebot
 
 TOKEN = os.getenv('TOKEN')
 
@@ -62,20 +62,23 @@ def admin_panel(message):
 	try:
 		if message.chat.type == "private":
 			if admin_list.check(message.from_user.id):
-				markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+				markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
 				markup.add('1', '2') #Имена кнопок
 				msg = bot.reply_to(message, 'Test text', reply_markup=markup)
 				bot.register_next_step_handler(msg, process_step)
-
-
-
 
 			else:
 				bot.send_message(message.chat.id, "You aren't admin, so f*** off")
 		else:
 			bot.send_message(message.chat.id, 'Admin panel work only in private chat')
-	except:
-		print("Err")
+	except Exception as err:
+		print(err)
+
+
+
+
+
+
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_MAIL))
 def got_email(message):
