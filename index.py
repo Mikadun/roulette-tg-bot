@@ -2,7 +2,7 @@ import telebot
 import os
 from flask import Flask, request
 
-from modules.db_roulettes import сlassic_roulette
+from modules.db_roulettes import classic_roulette
 from modules.keyboard import gen_markup
 from modules import utils, authentication
 from modules.states import states
@@ -61,7 +61,7 @@ def random_ab(message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
-    if :
+    if auth_users.get_points(call.from_user.id)[0] > 0:
         classic_roulette.add(call.message.chat.id, call.from_user.id, call.data)
         bot.answer_callback_query(call.id, "Your bet on "+call.data+" is "+str(classic_roulette.get_bet(call.message.chat.id, call.from_user.id, call.data))+" points now.")
     else:
