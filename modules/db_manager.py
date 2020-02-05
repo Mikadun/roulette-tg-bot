@@ -217,8 +217,8 @@ class Authenticated_users():
 			self.cur.execute('''SELECT * FROM "Authenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
 			temp = self.cur.fetchall()[0][6]
 			self.cur.execute('''UPDATE "Authenticated_users" SET "Points" = %s where "Tg_ID" = %s''', (temp+points, user_id))
-		except:
-			return False
+		except Exception as e:
+			return e
 		else:
 			self.conn.commit()
 			return True
@@ -236,8 +236,8 @@ class Authenticated_users():
 
 	def get_users_by_group(self, group):
 		try:
-			self.cur.execute('''SELECT "Tg_ID" FROM "Authenticated_users" WHERE ("Group" = %s)''', (group, ))
-			return [i[0] for i in self.cur.fetchall()]
+			self.cur.execute('''SELECT * FROM "Authenticated_users" WHERE ("Group" = %s)''', (group, ))
+			return self.cur.fetchall()
 		except:
 			return False
 
@@ -263,6 +263,13 @@ class Authenticated_users():
 			return self.cur.fetchall()
 		except:
 			return False
+
+	def get_groups(self):
+		try:
+			self.cur.execute('''SELECT DISTINCT "Group" FROM "Authenticated_users"''')
+			return self.cur.fetchall()
+		except:
+			return False		
 
 unauth_users = Unauthenticated_users()
 auth_users = Authenticated_users()
