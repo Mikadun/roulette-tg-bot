@@ -15,7 +15,7 @@ class Classic_roulette():
 		self.cur.close()
 		self.conn.close()
 
-	def add(self, ref_id, user_id, place, bet):
+	def add(self, ref_id, user_id, place, bet = 1):
 		try:
 			temp = self.get_bet(ref_id, user_id, place)
 
