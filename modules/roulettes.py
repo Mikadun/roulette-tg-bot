@@ -3,7 +3,7 @@ from random import randint, choice
 from secrets import choice
 
 def classic(players):
-    red = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
+    red, black = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36], []
     for i in range(1, 37):
         if i not in red:
             black.append(i)
@@ -12,7 +12,7 @@ def classic(players):
     res = {}
     res["x"] = x
     for i in players:
-        print(i[1].strip()  == 'Odd')
+        print(i[1].strip())
         if res.get(i[0]) == None:
             res[i[0]] = 0
         if i[1].strip() == 'Even' and x%2 == 0:
