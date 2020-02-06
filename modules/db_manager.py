@@ -270,7 +270,7 @@ class Authenticated_users():
 			self.cur.execute('''SELECT DISTINCT "Group" FROM "Authenticated_users"''')
 			return self.cur.fetchall()
 		except:
-			return False
+			return False		
 
 unauth_users = Unauthenticated_users()
 auth_users = Authenticated_users()
