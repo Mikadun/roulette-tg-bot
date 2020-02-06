@@ -63,6 +63,7 @@ def random_ab(message):
 def callback_query(call):
     try:
         if auth_users.get_points(call.from_user.id)[0][0] > 0:
+        	auth_users.remove_points(user_id, 1)
             classic_roulette.add(call.message.chat.id, call.from_user.id, call.data)
             bot.answer_callback_query(call.id, "Your bet on "+call.data+" is "+str(classic_roulette.get_bet(call.message.chat.id, call.from_user.id, call.data))+" points now.")
         else:
