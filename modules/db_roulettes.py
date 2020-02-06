@@ -15,7 +15,7 @@ class Roulette():
         self.cur.close()
         self.conn.close()
 
-    def add(self, ref_id, good, bad):
+    def add(self, ref_id, good = "#fio# win", bad = "#fio# lose"):
         try:
             self.cur.execute('''INSERT INTO "Roulette" ("Reference_ID", "Good", "Bad") VALUES (%s, %s, %s)''', (ref_id, good, bad))
         except:
@@ -24,9 +24,9 @@ class Roulette():
             self.conn.commit()
             return True
 
-    def add_user(self, ref_id, user_id):
+    def add_user(self, ref_id, user_id, f_name, s_name):
         try:
-            self.cur.execute('''INSERT INTO "Roulette_users" ("Reference_ID", "Tg_ID") VALUES (%s, %s)''', (ref_id, user_id))
+            self.cur.execute('''INSERT INTO "Roulette_users" ("Reference_ID", "Tg_ID", "F_name", "S_name") VALUES (%s, %s, %s, %s)''', (ref_id, user_id, f_name, s_name))
         except:
             return False
         else:
@@ -49,6 +49,17 @@ class Roulette():
             self.conn.commit()
             return True
 
+    def get_user(self, user_id):
+        try:
+            if self.check_user(user_id):
+                self.cur.execute('''SELECT "F_name", "S_name" FROM "Roulette_users" WHERE ("User_ID" = %s)''', (user_id, ))
+            else:
+                return []
+        except:
+            return False
+        else:
+            return self.cur.fetchall()
+
     def get_users(self, ref_id):
         try:
             self.cur.execute('''SELECT "Tg_ID" FROM "Roulette_users" WHERE ("Reference_ID" = %s)''', (ref_id, ))
@@ -56,6 +67,14 @@ class Roulette():
             return False
         else:
             return [i[0] for i in self.cur.fetchall()]
+
+    def get_info(self, ref_id):
+        try:
+            self.cur.execute('''SELECT "Good", "Bad" FROM "Roulette_users" WHERE ("Reference_ID" = %s)''', (ref_id, ))
+        except:
+            return False
+        else:
+            return list(self.cur.fetchall()[0])
 
     def check(self, ref_id):
         try:
