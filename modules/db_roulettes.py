@@ -66,33 +66,34 @@ class Classic_roulette():
         else:
             return self.cur.fetchall()
 
-	def check(self, ref_id):
-		try:
-			self.cur.execute('''SELECT * FROM "Classic_roulettes_list" WHERE ("Reference_ID" = %s)''', (ref_id,))
-		except:
-			return False
-		else:
-			return not(self.cur.fetchall() == [])
+    def check(self, ref_id):
+        try:
+            self.cur.execute('''SELECT * FROM "Classic_roulettes_list" WHERE ("Reference_ID" = %s)''', (ref_id,))
+        except:
+            return False
+        else:
+            return not(self.cur.fetchall() == [])
 
-	def add_message(self, ref_id, message_id):
-		try:
-			self.cur.execute('''INSERT INTO "Classic_roulettes_list" ("Reference_ID", "Message_ID") VALUES (%s, %s)''', (ref_id, message_id))
-		except:
-			return False
-		else:
-			self.conn.commit()
-			return True
+    def add_message(self, ref_id, message_id):
+        try:
+            self.cur.execute('''INSERT INTO "Classic_roulettes_list" ("Reference_ID", "Message_ID") VALUES (%s, %s)''', (ref_id, message_id))
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            self.conn.commit()
+            return True
 
-	def delete_message(self, ref_id):
-		try:
-			self.cur.execute('''SELECT "Message_ID" FROM "Classic_roulettes_list" WHERE ("Reference_ID = %s)''', (ref_id,))
-			temp = self.cur.fetchall()
-			self.cur.execute('''DELETE FROM "Classic_roulettes_list" WHERE ("Reference_ID" = %s)''', (ref_id,))
-		except:
-			return False
-		else:
-			self.conn.commit()
-			return temp[0][0]
+    def delete_message(self, ref_id):
+        try:
+            self.cur.execute('''SELECT "Message_ID" FROM "Classic_roulettes_list" WHERE ("Reference_ID = %s)''', (ref_id,))
+            temp = self.cur.fetchall()
+            self.cur.execute('''DELETE FROM "Classic_roulettes_list" WHERE ("Reference_ID" = %s)''', (ref_id,))
+        except:
+            return False
+        else:
+            self.conn.commit()
+            return temp[0][0]
 
 
 class Russian_roulette():
