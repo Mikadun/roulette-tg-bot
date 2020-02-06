@@ -112,7 +112,7 @@ def got_full_name(message):
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_GROUP))
 def got_group(message):
-    group = message.text.upper()
+    group = message.text.upper().strip()
     if utils.check_group(group):
         authentication.register(message.from_user.id, group)
         bot.send_message(message.chat.id, 'Succesfully registered')
