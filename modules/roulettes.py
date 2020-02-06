@@ -2,6 +2,8 @@ from modules.db_roulettes import russian_roulette
 from random import randint, choice
 from secrets import choice
 
+def roulette(players, good = int(round(len(players)/6)), bad = int(len(players)/6)):
+
 
 
 def classic(players):
