@@ -2,7 +2,7 @@ import telebot
 import os
 from modules.db_admin_list import admin_list
 from modules.db_roulettes import roulette
-#from modules.roulettes import f_roulette
+from modules.roulettes import f_roulette
 
 TOKEN = os.getenv('TOKEN')
 
@@ -16,9 +16,10 @@ def start_message(message):
 @bot.message_handler(commands=['roulette'])
 def first_roulette(message):
     try:
-        if admin_list.check(message.user.id):
-            print(message.text.split())
-            #roulette.add(message.chat.id)
+        if admin_list.check(message.from_user.id):
+            temp = message.text.split()
+
+
             bot.send_message(message.chat.id, "Admin started roulette. To participate, enter /participate")
         else:
             bot.send_message(message.chat.id, "It's for admin only")
@@ -26,8 +27,22 @@ def first_roulette(message):
         print(e)
         bot.send_message(message.chat.id, "Something going wrong...")
 
-#@bot.message_handler(commands=['participate'])
-#def first_roulette_participate(message):
+@bot.message_handler(commands=['participate'])
+def first_roulette_participate(message):
+    try:
+        if roulette.check(message.chat.id):
+            if not(message.chat.id in roulette.check_user(message.from_user.id)):
+                roulette.add_user(message.chat.id, message.from_user.id)
+            else:
+                bot.send_message(message.chat.id, "You already in roulette")
+        else:
+            bot.send_message(message.chat.id, "Roulette not started in this chat")
+    except Exception as e:
+        print(e)
+        bot.send_message(message.chat.id, "Something going wrong...")
+
+
+
 
 
 if __name__ == "__main__":
