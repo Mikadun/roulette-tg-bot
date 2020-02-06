@@ -3,7 +3,7 @@ import os
 from flask import Flask, request
 from modules import utils, authentication
 from modules.states import states
-from modules.db_manager import unauth_users
+from modules.db_manager import unauth_users, auth_users
 from modules import roulettes
 
 TOKEN = os.getenv('TOKEN')
@@ -74,6 +74,14 @@ def stop(message):
         bot.send_message(message.chat.id, 'You was deleted from users, bye')
     else:
         bot.send_message(message.chat.id, 'Bye')
+
+@bot.message_handler(commands=['score'])
+def score(message):
+    points = auth_users.get_points(message.from_user.id)
+    if not points == -1:
+        bot.send_message(message.chat.id, 'Your current points is {}'.format(points))
+    else:
+        bot.send_message(message.chat.id, 'You must register first')
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_MAIL))
 def got_email(message):

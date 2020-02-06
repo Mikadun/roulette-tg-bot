@@ -259,13 +259,11 @@ class Authenticated_users():
 
 	def get_points(self, user_id):
 		try:
-			if self.check_user_id(user_id):
-				self.cur.execute('''SELECT "Points" FROM "Authenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
-				return self.cur.fetchall()
-			else:
-				return -1
+			self.cur.execute('''SELECT "Points" FROM "Authenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
+			result = self.cur.fetchall()
+			return result if not result == [] else -1
 		except:
-			return False
+			return -1
 
 	def get_groups(self):
 		try:
