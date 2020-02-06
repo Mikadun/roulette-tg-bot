@@ -2,7 +2,7 @@ import telebot
 import os
 from modules.db_admin_list import admin_list
 from modules.db_roulettes import roulette
-from modules.roulettes import f_roulette
+from modules import roulettes
 
 TOKEN = os.getenv('TOKEN')
 
@@ -17,9 +17,9 @@ def start_message(message):
 def first_roulette(message):
     try:
         if admin_list.check(message.from_user.id):
-            temp = message.text.split()
+            temp = message.text.split('\n')
             if len(temp) > 1:
-                roulette.add(message.chat.id, *temp)
+                roulette.add(message.chat.id, *temp[1:])
             else:
                 roulette.add(message.chat.id)
             bot.send_message(message.chat.id, "Admin started roulette. To participate, enter /participate")
@@ -49,23 +49,37 @@ def first_roulette_participate(message):
 def first_roulette_roll(message):
     try:
         if admin_list.check(message.from_user.id):
-            temp = roulette.get_info(message.chat.id)
-            win, lose = f_roulette(roulette.get_users(message.chat.id))
-            roulette.delete(message.chat.id)
-            
-            temp_s = ""
-            for i in win:
-                name = roulette.get_user(i)
-                if name != [] and name != False:
-                    temp_s += temp[0].replace("#fio#", *name) + "\n"
-            bot.send_message(message.chat.id, temp_s)
+            if roulette.check(message.chat.id):
+                users = roulette.get_users(message.chat.id)
 
-            temp_s = ""
-            for i in lose:
-                name = roulette.get_user(i)
-                if name != [] and name != False:
-                    temp_s += temp[1].replace("#fio#", *name) + "\n"
-            bot.send_message(message.chat.id, temp_s)
+                if len(users) >= 3:
+                    temp = roulette.get_info(message.chat.id)
+                    win, lose = roulettes.f_roulette(users)
+
+                    temp_s = ""
+                    for i in range(len(win)):
+                        name = roulette.get_user(win[i])
+                        if name != [] and name != False:
+                            temp_s += temp[0].replace("#fio#", *name) + "\n"
+
+                    if temp_s != "":
+                        bot.send_message(message.chat.id, temp_s)
+
+                    temp_s = ""
+                    for i in range(len(lose)):
+                        name = roulette.get_user(lose[i])
+                        if name != [] and name != False:
+                            name = list(name[0])
+                            name[0] = name[0].strip()
+                            name[1] = name[1].strip()
+                            temp_s += temp[1].replace("#fio#", name[0]+" "+name[1]) + "\n"
+
+                    roulette.delete(message.chat.id)
+                    bot.send_message(message.chat.id, temp_s)
+                else:
+                    bot.send_message(message.chat.id, "Need 3 or more participants")
+            else:
+                bot.send_message(message.chat.id, "Roulette not started in this chat")
         else:
             bot.send_message(message.chat.id, "It's for admin only")
     except Exception as e:
