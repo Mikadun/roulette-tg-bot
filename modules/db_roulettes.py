@@ -66,6 +66,14 @@ class Classic_roulette():
         else:
             return self.cur.fetchall()
 
+    def check(self, ref_id):
+    	try:
+    		self.cur.execute('''SELECT * FROM "Classic_roulette" WHERE ("Reference_ID" = %s)''', (ref_id,))
+    	except:
+    		return False
+    	else:
+    		return not(self.cur.fetchall() == [])
+
 class Russian_roulette():
     def __init__(self):
         self.conn = psycopg2.connect(dbname=os.getenv('DB_NAME'), user=os.getenv('DB_NAME'), 
