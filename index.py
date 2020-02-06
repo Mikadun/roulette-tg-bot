@@ -18,8 +18,10 @@ def first_roulette(message):
     try:
         if admin_list.check(message.from_user.id):
             temp = message.text.split()
-
-
+            if len(temp) > 1:
+                roulette.add(message.chat.id, *temp)
+            else:
+                roulette.add(message.chat.id)
             bot.send_message(message.chat.id, "Admin started roulette. To participate, enter /participate")
         else:
             bot.send_message(message.chat.id, "It's for admin only")
@@ -30,13 +32,42 @@ def first_roulette(message):
 @bot.message_handler(commands=['participate'])
 def first_roulette_participate(message):
     try:
+        user = '{} {}'.format(message.from_user.first_name, message.from_user.last_name)
         if roulette.check(message.chat.id):
             if not(message.chat.id in roulette.check_user(message.from_user.id)):
-                roulette.add_user(message.chat.id, message.from_user.id)
+                roulette.add_user(message.chat.id, message.from_user.id, message.from_user.first_name, message.from_user.last_name)
+                bot.send_message(message.chat.id, '{} in roulette'.format(user))
             else:
-                bot.send_message(message.chat.id, "You already in roulette")
+                bot.send_message(message.chat.id, "{} already in roulette".format(user))
         else:
             bot.send_message(message.chat.id, "Roulette not started in this chat")
+    except Exception as e:
+        print(e)
+        bot.send_message(message.chat.id, "Something going wrong...")
+
+@bot.message_handler(commands=['rroll'])
+def first_roulette_roll(message):
+    try:
+        if admin_list.check(message.from_user.id):
+            temp = roulette.get_info(message.chat.id)
+            win, lose = f_roulette(roulette.get_users(message.chat.id))
+            roulette.delete(message.chat.id)
+            
+            temp_s = ""
+            for i in win:
+                name = roulette.get_user(i)
+                if name != [] and name != False:
+                    temp_s += temp[0].replace("#fio#", *name) + "\n"
+            bot.send_message(message.chat.id, temp_s)
+
+            temp_s = ""
+            for i in lose:
+                name = roulette.get_user(i)
+                if name != [] and name != False:
+                    temp_s += temp[1].replace("#fio#", *name) + "\n"
+            bot.send_message(message.chat.id, temp_s)
+        else:
+            bot.send_message(message.chat.id, "It's for admin only")
     except Exception as e:
         print(e)
         bot.send_message(message.chat.id, "Something going wrong...")
