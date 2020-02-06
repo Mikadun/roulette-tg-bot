@@ -51,11 +51,9 @@ class Roulette():
 
     def get_user(self, user_id):
         try:
-            if self.check_user(user_id):
-                self.cur.execute('''SELECT "F_name", "S_name" FROM "Roulette_users" WHERE ("User_ID" = %s)''', (user_id, ))
-            else:
-                return []
-        except:
+            self.cur.execute('''SELECT "F_name", "S_name" FROM "Roulette_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
+        except Exception as e:
+            print(e)
             return False
         else:
             return self.cur.fetchall()
@@ -70,8 +68,9 @@ class Roulette():
 
     def get_info(self, ref_id):
         try:
-            self.cur.execute('''SELECT "Good", "Bad" FROM "Roulette_users" WHERE ("Reference_ID" = %s)''', (ref_id, ))
-        except:
+            self.cur.execute('''SELECT "Good", "Bad" FROM "Roulette" WHERE ("Reference_ID" = %s)''', (ref_id, ))
+        except Exception as e:
+            print(e)
             return False
         else:
             return list(self.cur.fetchall()[0])
@@ -79,14 +78,15 @@ class Roulette():
     def check(self, ref_id):
         try:
             self.cur.execute('''SELECT "Reference_ID" FROM "Roulette" WHERE ("Reference_ID" = %s)''', (ref_id, ))
-        except:
+        except Exception as e:
+            print(e)
             return False
         else:
             return not(self.cur.fetchall()==[])
 
     def check_user(self, user_id):
         try:
-            self.cur.execute('''SELECT "Reference_ID" FROM "Roulette" WHERE ("User_ID" = %s)''', (user_id, ))
+            self.cur.execute('''SELECT "Reference_ID" FROM "Roulette_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
         except:
             return False
         else:
