@@ -4,9 +4,7 @@ from secrets import choice
 
 def classic(players):
     red, black = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36], []
-    for i in range(1, 37):
-        if i not in red:
-            black.append(i)
+    black = list(filter(lambda x: x not in red, range(0, 36)))
     x = randint(0, 36)
     print(x)
     res = {}
