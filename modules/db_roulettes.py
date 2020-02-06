@@ -65,4 +65,16 @@ class Roulette():
         else:
             return not(self.cur.fetchall()==[])
 
+    def check_user(self, user_id):
+        try:
+            self.cur.execute('''SELECT "Reference_ID" FROM "Roulette" WHERE ("User_ID" = %s)''', (user_id, ))
+        except:
+            return False
+        else:
+            temp = self.cur.fetchall()
+            if len(temp) >= 1:
+                return [i[0] for i in temp]
+            else:
+                return []
+
 roulette = Roulette()
