@@ -78,14 +78,14 @@ def callback_query(call):
 
 @bot.message_handler(commands=['classic'])
 def classic_bets(message):
-    if admin_list.check(message.from_user.id):
+    if admin_list.check(message.from_user.id) > 0:
         bot.send_message(message.chat.id, "Classic roulette began! Make your bets:", reply_markup=gen_markup())
     else:
         bot.send_message(message.chat.id, "You are not an administrator!")
 
 @bot.message_handler(commands=['begin'])
 def classic_start(message):
-    if admin_list.check(message.from_user.id):
+    if classic_roulette.check(message.from_user.id) and admin_list.check(message.from_user.id) > 0:
         res = roulettes.classic(classic_roulette.get_bets(message.chat.id))
         result = ""
         for i in res:
@@ -97,7 +97,7 @@ def classic_start(message):
         bot.send_message(message.chat.id, result)
         classic_roulette.delete(message.chat.id)
     else:
-        bot.send_message(message.chat.id, "You are not an administrator!")
+        bot.send_message(message.chat.id, "You are not an administrator or roulette hasn't any bets!")
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_MAIL))
 def got_email(message):
