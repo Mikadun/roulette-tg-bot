@@ -260,9 +260,10 @@ class Authenticated_users():
 	def get_points(self, user_id):
 		try:
 			self.cur.execute('''SELECT "Points" FROM "Authenticated_users" WHERE ("Tg_ID" = %s)''', (user_id, ))
-			return self.cur.fetchall()
+			result = self.cur.fetchall()
+			return result if not result == [] else -1
 		except:
-			return False
+			return -1
 
 	def get_groups(self):
 		try:

@@ -22,5 +22,8 @@ def is_full_name(name):
             return False
     return data
 
+with open('group_list.json', encoding='utf-8') as f:
+    groups = json.load(f)['data']
+
 def check_group(group):
-    return True
+    return group in groups
