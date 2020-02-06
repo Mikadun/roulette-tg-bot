@@ -10,6 +10,8 @@ from modules.states import states
 from modules.db_manager import unauth_users, auth_users
 from modules import roulettes
 
+lock = threading.Lock()
+
 TOKEN = os.getenv('TOKEN')
 
 bot = telebot.TeleBot(TOKEN)
@@ -67,8 +69,6 @@ def callback_query(call):
     else:
         try:
             if auth_users.get_points(call.from_user.id)[0][0] > 0:
-                #Тут скорее всего траблы из-за Race Condition, так что я добавил локи, стало лучше, но не идеально))
-                lock = threading.Lock()
                 lock.acquire()
                 classic_roulette.add(call.message.chat.id, call.from_user.id, call.data)
                 auth_users.remove_points(call.from_user.id, 1)
