@@ -1,8 +1,6 @@
 import os
 import urllib.parse as up
 import psycopg2
-from modules.db_manager import auth_users
-
 
 class Classic_roulette():
     def __init__(self):
@@ -18,7 +16,6 @@ class Classic_roulette():
     def add(self, ref_id, user_id, place, bet = 1):
         try:
             temp = self.get_bet(ref_id, user_id, place)
-            auth_users.remove_points(user.id, 1)
             if (temp == -1):
                 self.cur.execute('''INSERT INTO "Classic_roulette" ("Reference_ID", "Tg_ID", "Place", "Bet") VALUES (%s, %s, %s, %s)''', (ref_id, user_id, place, bet))
             elif (temp != False):
