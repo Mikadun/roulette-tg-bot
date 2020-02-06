@@ -12,10 +12,12 @@ bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    if authentication.start_registration(message.from_user.id):
-        bot.send_message(message.chat.id, 'Write your fefu email to register')
-    else:
-        bot.send_message(message.chat.id, 'You have been already registered or started registration')
+	if not message.chat.type == 'private':
+		bot.send_message(message.chat.id, 'If you\'re not registered, write /start in private chat')
+	elif authentication.start_registration(message.from_user.id):
+		bot.send_message(message.chat.id, 'Write your fefu email to register')
+	else:
+		bot.send_message(message.chat.id, 'You have been already registered or started registration')
 
 @bot.message_handler(commands=['russian'])
 def russian_roulette_start(message):
