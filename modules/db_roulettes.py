@@ -85,12 +85,14 @@ class Classic_roulette():
 
 	def delete_message(self, ref_id):
 		try:
+			self.cur.execute('''SELECT "Message_ID" FROM "Classic_roulettes_list" WHERE ("Reference_ID = %s)''', (ref_id,))
+			temp = self.cur.fetchall()
 			self.cur.execute('''DELETE FROM "Classic_roulettes_list" WHERE ("Reference_ID" = %s)''', (ref_id,))
 		except:
 			return False
 		else:
 			self.conn.commit()
-			return True
+			return temp[0][0]
 
 
 class Russian_roulette():
