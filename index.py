@@ -1,5 +1,9 @@
 import os
 from flask import Flask, request
+
+from modules.db_roulettes import classic_roulette
+from modules.db_admin_list import admin_list
+from modules.keyboard import gen_markup
 from modules import utils, authentication
 from modules.states import states
 from modules.db_manager import unauth_users, auth_users
@@ -279,6 +283,45 @@ def admin_panel_delete_user_2(message, user_id):
 	else:
 		bot.send_message(message.chat.id, "Invalid command")
 		admin_panel_main(message)		
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_query(call):
+    if not auth_users.check_user_id(call.from_user.id):
+        bot.answer_callback_query(call.id, "You are not registered!")
+    else:
+        try:
+            if auth_users.get_points(call.from_user.id)[0][0] > 0:
+                classic_roulette.add(call.message.chat.id, call.from_user.id, call.data)
+                auth_users.remove_points(call.from_user.id, 1)
+                bot.answer_callback_query(call.id, "Your bet on "+call.data+" is "+str(classic_roulette.get_bet(call.message.chat.id, call.from_user.id, call.data))+" points now.")
+            else:
+                bot.answer_callback_query(call.id, "No more points left!")
+        except Exception as e:
+            print(e)
+            bot.answer_callback_query(call.id, "Wow, not so fast!")
+
+@bot.message_handler(commands=['classic'])
+def classic_bets(message):
+    if admin_list.check(message.from_user.id) > 0:
+        bot.send_message(message.chat.id, "Classic roulette began! Make your bets:", reply_markup=gen_markup())
+    else:
+        bot.send_message(message.chat.id, "You are not an administrator!")
+
+@bot.message_handler(commands=['roll'])
+def classic_start(message):
+    if classic_roulette.check(message.from_user.id) and admin_list.check(message.from_user.id) > 0:
+        res = roulettes.classic(classic_roulette.get_bets(message.chat.id))
+        result = ""
+        for i in res:
+            if i == "x":
+                bot.send_message(message.chat.id, 'And result is... '+str(res[i])+'!')
+            else:
+                auth_users.add_points(i, res[i])
+                result += auth_users.get_info(i)[2].strip()+' '+auth_users.get_info(i)[4].strip()+' got '+str(res[i])+' points!\n'
+        bot.send_message(message.chat.id, result)
+        classic_roulette.delete(message.chat.id)
+    else:
+        bot.send_message(message.chat.id, "You are not an administrator or roulette hasn't any bets!")
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_MAIL))
 def got_email(message):

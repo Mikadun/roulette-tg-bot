@@ -29,3 +29,4 @@ def register(user_id, group):
 
 def delete(user_id):
     return auth_users.delete(user_id) + unauth_users.delete(user_id)
+
