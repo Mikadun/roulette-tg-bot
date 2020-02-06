@@ -1,5 +1,6 @@
 import telebot
 import os
+import threading
 from flask import Flask, request
 
 from modules.db_roulettes import classic_roulette
@@ -22,54 +23,62 @@ def start_message(message):
 
 @bot.message_handler(commands=['russian'])
 def russian_roulette_start(message):
-	try:
-		data = map(int, message.text.split()[1:])
-		if roulettes.russian_roulette_start(message.chat.id, *data):
-			bot.send_message(message.chat.id, 'Russian roulette has begun! You can /roll to shoot')
-		else:
-			bot.send_message(message.chat.id, 'Russian roulette has already started')
-	except:
-		bot.send_message(message.chat.id, 'Invalid command')
+    try:
+        data = map(int, message.text.split()[1:])
+        if roulettes.russian_roulette_start(message.chat.id, *data):
+            bot.send_message(message.chat.id, 'Russian roulette has begun! You can /roll to shoot')
+        else:
+            bot.send_message(message.chat.id, 'Russian roulette has already started')
+    except:
+        bot.send_message(message.chat.id, 'Invalid command')
 
 @bot.message_handler(commands=['roll'])
 def russian_roulette_shoot(message):
-	result = roulettes.russian_roulette_shoot(message.chat.id)
-	if not result == -1:
-		user = '{} {}'.format(message.from_user.first_name, message.from_user.last_name)
-		if not result:
-			bot.send_message(message.chat.id, '{} is safe, woooh'.format(user))
-		else:
-			bot.send_message(message.chat.id, '{} has got shot, F'.format(user))
-	else:
-		bot.send_message(message.chat.id, "You haven't start roulette. Write /russian")
+    result = roulettes.russian_roulette_shoot(message.chat.id)
+    if not result == -1:
+        user = '{} {}'.format(message.from_user.first_name, message.from_user.last_name)
+        if not result:
+            bot.send_message(message.chat.id, '{} is safe, woooh'.format(user))
+        else:
+            bot.send_message(message.chat.id, '{} has got shot, F'.format(user))
+    else:
+        bot.send_message(message.chat.id, "You haven't start roulette. Write /russian")
 
 @bot.message_handler(commands=['chose'])
 def chose_line(message):
-	try:
-		text = message.text.split('\n')[1:]
-		bot.send_message(message.chat.id, roulettes.chose_line(text))
-	except:
-		bot.send_message(message.chat.id, 'Invalid command. Must have lines below command')
+    try:
+        text = message.text.split('\n')[1:]
+        bot.send_message(message.chat.id, roulettes.chose_line(text))
+    except:
+        bot.send_message(message.chat.id, 'Invalid command. Must have lines below command')
 
 @bot.message_handler(commands=['random'])
 def random_ab(message):
-	try:
-		a, b = map(int, message.text.split()[1:])
-		bot.send_message(message.chat.id, 'Result: {}'.format(roulettes.random(a, b)))
-	except:
-		bot.send_message(message.chat.id, 'Invalid command')
+    try:
+        a, b = map(int, message.text.split()[1:])
+        bot.send_message(message.chat.id, 'Result: {}'.format(roulettes.random(a, b)))
+    except:
+        bot.send_message(message.chat.id, 'Invalid command')
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
-    try:
-        if auth_users.get_points(call.from_user.id)[0][0] > 0:
-            classic_roulette.add(call.message.chat.id, call.from_user.id, call.data)
-            auth_users.remove_points(call.from_user.id, 1)
-            bot.answer_callback_query(call.id, "Your bet on "+call.data+" is "+str(classic_roulette.get_bet(call.message.chat.id, call.from_user.id, call.data))+" points now.")
-        else:
-            bot.answer_callback_query(call.id, "No more points left!")
-    except:
+    if not auth_users.check_user_id(call.from_user.id):
         bot.answer_callback_query(call.id, "You are not registered!")
+    else:
+        try:
+            if auth_users.get_points(call.from_user.id)[0][0] > 0:
+                #Тут скорее всего траблы из-за Race Condition, так что я добавил локи, стало лучше, но не идеально))
+                lock = threading.Lock()
+                lock.acquire()
+                classic_roulette.add(call.message.chat.id, call.from_user.id, call.data)
+                auth_users.remove_points(call.from_user.id, 1)
+                bot.answer_callback_query(call.id, "Your bet on "+call.data+" is "+str(classic_roulette.get_bet(call.message.chat.id, call.from_user.id, call.data))+" points now.")
+                lock.release()
+            else:
+                bot.answer_callback_query(call.id, "No more points left!")
+        except Exception as e:
+            print(e)
+            bot.answer_callback_query(call.id, "Wow, not so fast!")
 
 @bot.message_handler(commands=['classic'])
 def classic_bets(message):
@@ -77,15 +86,14 @@ def classic_bets(message):
 
 @bot.message_handler(commands=['begin'])
 def classic_start(message):
-    print(classic_roulette.get_bets(message.chat.id))
     res = roulettes.classic(classic_roulette.get_bets(message.chat.id))
     for i in res:
         if i == "x":
             bot.send_message(message.chat.id, 'And result is... '+str(res[i])+'!')
         else:
             auth_users.add_points(i, res[i])
-            bot.send_message(message.chat.id, auth_users.get_info(i)[0][2]+auth_users.get_info(i)[0][4]+' got '+str(res[i])+'points!')
-    сlassic_roulette.delete(message.chat.id)
+            bot.send_message(message.chat.id, auth_users.get_info(i)[2].strip()+' '+auth_users.get_info(i)[4].strip()+' got '+str(res[i])+' points!')
+    classic_roulette.delete(message.chat.id)
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_MAIL))
 def got_email(message):
