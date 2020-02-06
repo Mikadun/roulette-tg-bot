@@ -8,25 +8,29 @@ def classic(players):
         if i not in red:
             black.append(i)
     x = randint(0, 36)
-    print(x)
     res = {}
     res["x"] = x
     for i in players:
-        print(i[1].strip())
         if res.get(i[0]) == None:
             res[i[0]] = 0
-        if i[1].strip() == 'Even' and x%2 == 0:
-            res[i[0]] += i[2]*2
+        if i[1].strip() == 'Even':
+            if x%2 == 0:
+                res[i[0]] += i[2]*2
         elif i[1].strip()  == 'Odd':
-            res[i[0]] += i[2]*2
-        elif i[1].strip()  == 'Red' and x in red:
-            res[i[0]] += i[2]*2
-        elif i[1].strip()  == 'Black' and x in black:
-            res[i[0]] += i[2]*2
-        elif i[1].strip()  == '1-18' and x<=18:
-            res[i[0]] += i[2]*2
+            if x%2 == 1:
+                res[i[0]] += i[2]*2
+        elif i[1].strip()  == 'Red':
+            if x in red:
+                res[i[0]] += i[2]*2
+        elif i[1].strip()  == 'Black':
+            if x in black:
+                res[i[0]] += i[2]*2
+        elif i[1].strip()  == '1-18':
+            if x <= 18:
+                res[i[0]] += i[2]*2
         elif i[1].strip()  == '19-36':
-            res[i[0]] += i[2]*2
+            if x >= 19:
+                res[i[0]] += i[2]*2
         elif int(i[1].strip()) == x:
             res[i[0]] += i[2]*36
     return res 

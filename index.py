@@ -77,15 +77,14 @@ def classic_bets(message):
 
 @bot.message_handler(commands=['begin'])
 def classic_start(message):
-    print(classic_roulette.get_bets(message.chat.id))
     res = roulettes.classic(classic_roulette.get_bets(message.chat.id))
     for i in res:
         if i == "x":
             bot.send_message(message.chat.id, 'And result is... '+str(res[i])+'!')
         else:
             auth_users.add_points(i, res[i])
-            bot.send_message(message.chat.id, auth_users.get_info(i)[0][2]+auth_users.get_info(i)[0][4]+' got '+str(res[i])+'points!')
-    сlassic_roulette.delete(message.chat.id)
+            bot.send_message(message.chat.id, auth_users.get_info(i)[2].strip()+' '+auth_users.get_info(i)[4].strip()+' got '+str(res[i])+' points!')
+    classic_roulette.delete(message.chat.id)
 
 @bot.message_handler(func = states.is_current_state(states.S_ENTER_MAIL))
 def got_email(message):
